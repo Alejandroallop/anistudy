@@ -1,0 +1,109 @@
+<main class="c-login">
+    <!-- PANEL DE LOGIN (GLASSMORPHISM) -->
+    <article class="c-login__card">
+        <!-- COLUMNA IZQUIERDA: FORMULARIO -->
+        <section class="c-login__form-section">
+            <!-- HEADER: Logo y Títulos -->
+            <header class="c-login__header">
+                <div class="c-login__logo-wrapper">
+                    <img src="/assets/images/logo.png" alt="AniStudy Logo" class="c-login__logo" />
+                    <span class="c-login__brand">AniStudy</span>
+                </div>
+                <h1 class="c-login__title">Bienvenido a <span class="c-login__title--highlight">AniStudy</span></h1>
+                <p class="c-login__subtitle">Tu aventura de productividad comienza aquí.</p>
+            </header>
+
+            <!-- FORMULARIO -->
+            <form [formGroup]="loginForm" class="c-login__form" (ngSubmit)="onLogin()">
+                <!-- Name Input -->
+                <div class="c-login__group">
+                    <label for="name" class="c-login__label">Nombre del Estudiante</label>
+                    <span class="c-login__input-wrapper">
+                        <i class="pi pi-user c-login__input-icon" aria-hidden="true"></i>
+                        <input pInputText id="name" type="text" formControlName="name" placeholder="Tu nombre"
+                            class="c-login__input" aria-label="Nombre del estudiante" />
+                    </span>
+                </div>
+
+                <!-- Email Input -->
+                <div class="c-login__group">
+                    <label for="email" class="c-login__label">Correo Electrónico</label>
+                    <span class="c-login__input-wrapper">
+                        <i class="pi pi-envelope c-login__input-icon" aria-hidden="true"></i>
+                        <input pInputText id="email" type="email" formControlName="email" placeholder="tu@email.com"
+                            class="c-login__input" aria-label="Correo electrónico" />
+                    </span>
+                </div>
+
+                <!-- Password Input -->
+                <div class="c-login__group">
+                    <label for="password" class="c-login__label">Contraseña</label>
+                    <span class="c-login__input-wrapper">
+                        <i class="pi pi-lock c-login__input-icon" aria-hidden="true"></i>
+                        <p-password id="password" formControlName="password" placeholder="••••••••" [toggleMask]="true"
+                            [feedback]="false" styleClass="c-login__password" inputStyleClass="c-login__input"
+                            aria-label="Contraseña"></p-password>
+                    </span>
+                    <a href="#" class="c-login__forgot-link">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" pButton class="c-login__btn c-login__btn--primary" aria-label="Iniciar sesión">
+                    <i class="pi pi-sign-in" aria-hidden="true"></i>
+                    <span>Entrar al Dashboard</span>
+                </button>
+
+                <!-- Demo Button -->
+                <button type="button" pButton class="c-login__btn c-login__btn--demo"
+                    aria-label="Probar modo demostración">
+                    <i class="pi pi-play-circle" aria-hidden="true"></i>
+                    <span>Modo Demo</span>
+                </button>
+            </form>
+
+            <!-- FOOTER -->
+            <footer class="c-login__footer">
+                <p class="c-login__footer-text">
+                    Hecho con <i class="pi pi-heart" aria-hidden="true"></i> para estudiantes
+                </p>
+            </footer>
+        </section>
+
+        <!-- COLUMNA DERECHA: AVATARS -->
+        <aside class="c-login__avatar-section">
+            <header class="c-login__avatar-header">
+                <i class="pi pi-user-plus c-login__avatar-icon" aria-hidden="true"></i>
+                <h2 class="c-login__avatar-title">Elige tu Avatar</h2>
+            </header>
+
+            <div class="c-login__avatar-grid">
+                <article *ngFor="let avatar of avatars" class="c-login__avatar-card"
+                    [class.c-login__avatar-card--selected]="selectedAvatar === avatar.id"
+                    (click)="selectAvatar(avatar.id)" [attr.aria-label]="'Seleccionar avatar ' + avatar.name"
+                    role="button" tabindex="0">
+                    <div class="c-login__avatar-img-wrapper">
+                        <img [src]="avatar.image" [alt]="avatar.name" class="c-login__avatar-img" />
+                    </div>
+                    <span class="c-login__avatar-name">{{ avatar.name }}</span>
+                </article>
+            </div>
+
+            <!-- Mostrar nombre seleccionado -->
+            <div class="c-login__student-info" *ngIf="loginForm.value.name">
+                <span class="c-login__student-label">ESTUDIANTE:</span>
+                <p class="c-login__student-name">{{ loginForm.value.name }}</p>
+            </div>
+
+            <!-- Status Badges -->
+            <div class="c-login__status">
+                <span class="c-login__status-badge c-login__status-badge--online">
+                    <i class="pi pi-circle-fill" aria-hidden="true"></i>
+                    ONLINE
+                </span>
+                <span class="c-login__status-badge c-login__status-badge--version">
+                    v2.1.0
+                </span>
+            </div>
+        </aside>
+    </article>
+</main>

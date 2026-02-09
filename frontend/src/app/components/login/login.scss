@@ -1,0 +1,443 @@
+/* ==========================================
+   LOGIN COMPONENT - BEM STRICT
+   ========================================== */
+
+@use 'sass:map';
+@use 'sass:color';
+@use '../../../assets/scss/abstracts/variables' as *;
+@use '../../../assets/scss/abstracts/mixins' as *;
+
+/* ==========================================
+   BLOCK: c-login (Main Container)
+   ========================================== */
+.c-login {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+/* ==========================================
+   ELEMENT: c-login__card (Panel Principal)
+   ========================================== */
+.c-login__card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    max-width: 1100px;
+    width: 100%;
+    padding: 48px;
+    animation: fadeIn 0.8s ease;
+
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    /* Texto oscuro por defecto */
+    color: map.get($theme-colors, 'dark');
+}
+
+/* ==========================================
+   ELEMENT: c-login__form-section
+   ========================================== */
+.c-login__form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ==========================================
+   ELEMENT: c-login__header
+   ========================================== */
+.c-login__header {
+    margin-bottom: 16px;
+}
+
+.c-login__logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.c-login__logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.c-login__brand {
+    font-size: 20px;
+    font-weight: 600;
+    color: map.get($theme-colors, 'dark');
+}
+
+.c-login__title {
+    font-size: 32px;
+    font-weight: 700;
+    color: map.get($theme-colors, 'dark');
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.c-login__title--highlight {
+    background: linear-gradient(135deg, #FF477E 0%, #7000FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.c-login__subtitle {
+    font-size: 15px;
+    color: #555;
+    font-weight: 400;
+}
+
+/* ==========================================
+   ELEMENT: c-login__form
+   ========================================== */
+.c-login__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.c-login__group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.c-login__label {
+    font-size: 13px;
+    font-weight: 600;
+    color: map.get($theme-colors, 'dark');
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.c-login__input-wrapper {
+    width: 100%;
+    position: relative;
+    display: block;
+}
+
+.c-login__input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    z-index: 1;
+    font-size: 14px;
+}
+
+.c-login__input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: $font-family-base;
+    font-size: 14px;
+    transition: all $transition-fast;
+    background: rgba(255, 255, 255, 0.5);
+    color: map.get($theme-colors, 'dark');
+}
+
+.c-login__input:focus {
+    outline: none;
+    border-color: map-get($theme-colors, 'primary');
+    box-shadow: 0 0 0 3px rgba(255, 71, 126, 0.1);
+}
+
+.c-login__input::placeholder {
+    color: #666;
+    opacity: 0.8;
+}
+
+.c-login__password {
+    width: 100%;
+    position: relative;
+}
+
+// Password toggle button alignment fix
+.c-login__password ::ng-deep .p-password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #666;
+}
+
+.c-login__password ::ng-deep .p-password-toggle:hover {
+    color: map.get($theme-colors, 'primary');
+}
+
+.c-login__forgot-link {
+    align-self: flex-end;
+    font-size: 12px;
+    color: map-get($theme-colors, 'primary');
+    text-decoration: none;
+    font-weight: 500;
+    transition: all $transition-fast;
+}
+
+.c-login__forgot-link:hover {
+    color: #FF70A0;
+    text-decoration: underline;
+}
+
+/* ==========================================
+   ELEMENT: c-login__btn (Buttons)
+   ========================================== */
+.c-login__btn {
+    width: 100%;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 12px;
+    transition: all $transition-normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.c-login__btn--primary {
+    background: linear-gradient(135deg, #FF477E 0%, #7000FF 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 71, 126, 0.3);
+}
+
+.c-login__btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 71, 126, 0.4);
+}
+
+.c-login__btn--demo {
+    background: transparent;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    color: map-get($theme-colors, 'dark');
+}
+
+.c-login__btn--demo:hover {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: map-get($theme-colors, 'primary');
+    color: map-get($theme-colors, 'primary');
+}
+
+/* ==========================================
+   ELEMENT: c-login__footer
+   ========================================== */
+.c-login__footer {
+    margin-top: auto;
+    text-align: center;
+}
+
+.c-login__footer-text {
+    font-size: 12px;
+    color: #666;
+}
+
+/* ==========================================
+   ELEMENT: c-login__avatar-section
+   ========================================== */
+.c-login__avatar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.c-login__avatar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.c-login__avatar-icon {
+    color: map-get($theme-colors, 'primary');
+    font-size: 20px;
+}
+
+.c-login__avatar-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: map-get($theme-colors, 'dark');
+}
+
+.c-login__avatar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.c-login__avatar-card {
+    background: rgba(255, 255, 255, 0.4);
+    border: 3px solid transparent;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all $transition-normal;
+}
+
+.c-login__avatar-card:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.c-login__avatar-card--selected {
+    border-color: map-get($theme-colors, 'primary');
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 0 3px rgba(255, 71, 126, 0.2);
+}
+
+.c-login__avatar-img-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.c-login__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.c-login__avatar-name {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: map.get($theme-colors, 'dark');
+}
+
+.c-login__avatar-role {
+    font-size: 12px;
+    color: #666;
+    font-weight: 400;
+}
+
+/* ==========================================
+   ELEMENT: c-login__student-info
+   ========================================== */
+.c-login__student-info {
+    background: rgba(255, 255, 255, 0.4);
+    padding: 16px 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.c-login__student-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.c-login__student-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: map-get($theme-colors, 'dark');
+}
+
+/* ==========================================
+   ELEMENT: c-login__status
+   ========================================== */
+.c-login__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: auto;
+}
+
+.c-login__status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.c-login__status-badge--online {
+    color: #27ae60;
+}
+
+.c-login__status-badge--version {
+    color: #666;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 968px) {
+    .c-login__card {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 32px;
+    }
+
+    .c-login__title {
+        font-size: 28px;
+    }
+
+    .c-login__avatar-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .c-login {
+        padding: 16px;
+    }
+
+    .c-login__card {
+        padding: 24px;
+    }
+
+    .c-login__title {
+        font-size: 24px;
+    }
+
+    .c-login__avatar-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================
+   ANIMATION
+   ========================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

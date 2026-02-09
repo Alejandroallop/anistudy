@@ -1,0 +1,79 @@
+<section class="l-pomodoro">
+    <!-- HEADER -->
+    <header class="l-pomodoro__header">
+        <div class="c-mode-badge">
+            <i class="pi pi-bolt c-mode-badge__icon" aria-hidden="true"></i>
+            <span class="c-mode-badge__text">{{ currentMode === 'focus' ? 'MODO ENFOQUE ACTIVO' : 'MODO DESCANSO'
+                }}</span>
+        </div>
+        <h1 class="l-pomodoro__title">Sala de Pomodoro</h1>
+        <p class="l-pomodoro__subtitle">Concéntrate, relájate y sube de nivel.</p>
+    </header>
+
+    <!-- TIMER CARD -->
+    <article class="c-timer">
+        <!-- TIMER DISPLAY -->
+        <div class="c-timer__display">
+            <div class="c-timer__block">
+                <time class="c-timer__time" [attr.datetime]="'PT' + minutes + 'M'">{{ minutes < 10 ? '0' + minutes :
+                        minutes }}</time>
+                        <span class="c-timer__label">MINUTOS</span>
+            </div>
+
+            <div class="c-timer__separator">:</div>
+
+            <div class="c-timer__block">
+                <time class="c-timer__time" [attr.datetime]="'PT' + seconds + 'S'">{{ seconds < 10 ? '0' + seconds :
+                        seconds }}</time>
+                        <span class="c-timer__label">SEGUNDOS</span>
+            </div>
+        </div>
+
+        <!-- TIMER CONTROLS -->
+        <div class="c-timer__controls">
+            <button class="c-timer__button c-timer__button--primary" (click)="isRunning ? pauseTimer() : startTimer()"
+                [class.c-timer__button--pause]="isRunning"
+                [attr.aria-label]="isRunning ? 'Pausar temporizador' : 'Iniciar temporizador'">
+                <i [class]="isRunning ? 'pi pi-pause' : 'pi pi-play'" aria-hidden="true"></i>
+                <span>{{ isRunning ? 'Pausa' : 'Iniciar Enfoque' }}</span>
+            </button>
+
+            <button class="c-timer__button c-timer__button--secondary" (click)="setBreakMode('short')"
+                [disabled]="isRunning" aria-label="Establecer descanso corto">
+                <i class="pi pi-coffee" aria-hidden="true"></i>
+                <span>Corto</span>
+            </button>
+
+            <button class="c-timer__button c-timer__button--secondary" (click)="setBreakMode('long')"
+                [disabled]="isRunning" aria-label="Establecer descanso largo">
+                <i class="pi pi-moon" aria-hidden="true"></i>
+                <span>Largo</span>
+            </button>
+
+            <button class="c-timer__button c-timer__button--reset" (click)="resetTimer()" [disabled]="isRunning"
+                aria-label="Reiniciar temporizador">
+                <i class="pi pi-refresh" aria-hidden="true"></i>
+                <span>Reiniciar</span>
+            </button>
+        </div>
+    </article>
+
+    <!-- MUSIC WIDGET -->
+    <aside class="c-music">
+        <img src="/assets/images/disco.png" alt="Lofi Album Art" class="c-music__album"
+            [class.c-music__album--spinning]="isMusicPlaying" />
+
+        <div class="c-music__info">
+            <h4 class="c-music__track">Lofi Beats Radio</h4>
+            <p class="c-music__artist">
+                <i class="pi pi-circle-fill" aria-hidden="true"></i>
+                Chill Vibes • Live
+            </p>
+        </div>
+
+        <button class="c-music__button" (click)="toggleMusic()"
+            [attr.aria-label]="isMusicPlaying ? 'Pausar música' : 'Reproducir música'">
+            <i [class]="isMusicPlaying ? 'pi pi-pause' : 'pi pi-play'" aria-hidden="true"></i>
+        </button>
+    </aside>
+</section>

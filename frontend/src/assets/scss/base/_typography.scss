@@ -1,0 +1,125 @@
+/* ==========================================
+   TYPOGRAPHY - ANISTUDY
+   ========================================== */
+
+@use 'sass:map';
+@use 'sass:color';
+@use '../abstracts/variables' as *;
+
+// Base Font
+body {
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    font-weight: $font-weight-regular;
+    color: map.get($theme-colors, 'dark');
+    line-height: 1.6;
+}
+
+// Headings
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: $font-weight-black;
+    line-height: 1.2;
+    margin-bottom: $spacing-unit * 2;
+    color: #2D3436;
+}
+
+h1 {
+    font-size: 2.5rem; // 40px
+
+    @media (max-width: 768px) {
+        font-size: 2rem; // 32px
+    }
+}
+
+h2 {
+    font-size: 2rem; // 32px
+
+    @media (max-width: 768px) {
+        font-size: 1.75rem; // 28px
+    }
+}
+
+h3 {
+    font-size: 1.5rem; // 24px
+
+    @media (max-width: 768px) {
+        font-size: 1.25rem; // 20px
+    }
+}
+
+h4 {
+    font-size: 1.25rem; // 20px
+}
+
+h5 {
+    font-size: 1rem; // 16px
+}
+
+h6 {
+    font-size: 0.875rem; // 14px
+}
+
+// Paragraph
+p {
+    margin-bottom: $spacing-unit * 2;
+    color: #636E72;
+}
+
+// Links
+a {
+    color: map.get($theme-colors, 'primary');
+    transition: color $transition-fast;
+
+    &:hover {
+        color: color.adjust(map.get($theme-colors, 'primary'), $lightness: -10%);
+    }
+}
+
+// Strong & Bold
+strong,
+b {
+    font-weight: $font-weight-bold;
+}
+
+// Small Text
+small {
+    font-size: 0.875em;
+    color: #B2BEC3;
+}
+
+// Code
+code {
+    font-family: 'Courier New', monospace;
+    background: #F8F9FA;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: map.get($theme-colors, 'secondary');
+}
+
+// Pre
+pre {
+    background: #F8F9FA;
+    padding: $spacing-unit * 2;
+    border-radius: $border-radius;
+    overflow-x: auto;
+
+    code {
+        background: none;
+        padding: 0;
+    }
+}
+
+// Blockquote
+blockquote {
+    border-left: 4px solid map.get($theme-colors, 'primary');
+    padding-left: $spacing-unit * 2;
+    margin: $spacing-unit * 3 0;
+    font-style: italic;
+    color: #636E72;
+}

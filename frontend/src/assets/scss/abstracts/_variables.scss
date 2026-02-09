@@ -1,0 +1,63 @@
+/* ==========================================
+   VARIABLES - ANISTUDY THEME
+   ========================================== */
+
+// Theme Colors Map
+$theme-colors: (
+    'primary': #FF477E,
+    // Rosa principal
+    'secondary': #7000FF,
+    // Morado secundario
+    'dark': #121212,
+    // Negro/Oscuro
+    'light': #ffffff,
+    // Blanco
+    'glass': rgba(255, 255, 255, 0.1) // Efecto cristal base
+);
+
+// Spacing System (8px base)
+$spacing-unit: 8px;
+
+// Border Radius
+$border-radius: 12px;
+$border-radius-sm: 8px;
+$border-radius-lg: 20px;
+$border-radius-xl: 24px;
+
+// Typography
+$font-family-base: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-size-base: 14px;
+$font-weight-regular: 400;
+$font-weight-medium: 600;
+$font-weight-bold: 700;
+$font-weight-black: 800;
+
+// Shadows
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+$shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+
+// Transitions
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Z-index layers
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+
+// Breakpoints
+$breakpoints: (
+    'xs': 0,
+    'sm': 576px,
+    'md': 768px,
+    'lg': 1024px,
+    'xl': 1280px,
+    'xxl': 1536px
+);

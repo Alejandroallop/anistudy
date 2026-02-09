@@ -1,0 +1,106 @@
+/* ==========================================
+   MIXINS - ANISTUDY
+   ========================================== */
+
+@use 'sass:map';
+@use 'variables' as *;
+
+// Glassmorphism Effect
+@mixin glass($opacity: 0.1, $blur: 10px) {
+    background: rgba(255, 255, 255, $opacity);
+    backdrop-filter: blur($blur);
+    -webkit-backdrop-filter: blur($blur);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// Flexbox Center
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// Flexbox Between
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+// Responsive Breakpoints
+@mixin respond-to($breakpoint) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        $breakpoint-value: map.get($breakpoints, $breakpoint);
+
+        @media (min-width: $breakpoint-value) {
+            @content;
+        }
+    }
+
+    @else {
+        @warn "Invalid breakpoint: #{$breakpoint}.";
+    }
+}
+
+// Truncate Text
+@mixin truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// Card Base
+@mixin card-base {
+    background: white;
+    border-radius: $border-radius-lg;
+    padding: 24px;
+    box-shadow: $shadow-md;
+    transition: all $transition-normal;
+}
+
+// Button Reset
+@mixin button-reset {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+// Absolute Center
+@mixin absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+// Smooth Scroll
+@mixin smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+// Hide Scrollbar
+@mixin hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+// Gradient Background
+@mixin gradient-bg($color1, $color2, $deg: 135deg) {
+    background: linear-gradient($deg, $color1 0%, $color2 100%);
+}
+
+// Focus Ring
+@mixin focus-ring($color: map.get($theme-colors, 'primary')) {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba($color, 0.1);
+    border-color: $color;
+}

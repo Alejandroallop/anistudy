@@ -1,0 +1,328 @@
+/* ==========================================
+   UTILITIES - GENERATED UTILITY CLASSES
+   ========================================== */
+
+@use '../abstracts/variables' as *;
+
+/* ==========================================
+   COLOR UTILITIES
+   ========================================== */
+
+// Background Colors
+@each $name, $color in $theme-colors {
+    .u-bg-#{$name} {
+        background-color: $color !important;
+    }
+}
+
+// Text Colors
+@each $name, $color in $theme-colors {
+    .u-text-#{$name} {
+        color: $color !important;
+    }
+}
+
+/* ==========================================
+   SPACING UTILITIES
+   ========================================== */
+
+// Margins (1-5 = 8px, 16px, 24px, 32px, 40px)
+@for $i from 1 through 5 {
+    .u-m-#{$i} {
+        margin: $spacing-unit * $i !important;
+    }
+
+    .u-mt-#{$i} {
+        margin-top: $spacing-unit * $i !important;
+    }
+
+    .u-mr-#{$i} {
+        margin-right: $spacing-unit * $i !important;
+    }
+
+    .u-mb-#{$i} {
+        margin-bottom: $spacing-unit * $i !important;
+    }
+
+    .u-ml-#{$i} {
+        margin-left: $spacing-unit * $i !important;
+    }
+
+    .u-mx-#{$i} {
+        margin-left: $spacing-unit * $i !important;
+        margin-right: $spacing-unit * $i !important;
+    }
+
+    .u-my-#{$i} {
+        margin-top: $spacing-unit * $i !important;
+        margin-bottom: $spacing-unit * $i !important;
+    }
+}
+
+// Paddings (1-5 = 8px, 16px, 24px, 32px, 40px)
+@for $i from 1 through 5 {
+    .u-p-#{$i} {
+        padding: $spacing-unit * $i !important;
+    }
+
+    .u-pt-#{$i} {
+        padding-top: $spacing-unit * $i !important;
+    }
+
+    .u-pr-#{$i} {
+        padding-right: $spacing-unit * $i !important;
+    }
+
+    .u-pb-#{$i} {
+        padding-bottom: $spacing-unit * $i !important;
+    }
+
+    .u-pl-#{$i} {
+        padding-left: $spacing-unit * $i !important;
+    }
+
+    .u-px-#{$i} {
+        padding-left: $spacing-unit * $i !important;
+        padding-right: $spacing-unit * $i !important;
+    }
+
+    .u-py-#{$i} {
+        padding-top: $spacing-unit * $i !important;
+        padding-bottom: $spacing-unit * $i !important;
+    }
+}
+
+// Margin Auto
+.u-m-auto {
+    margin: auto !important;
+}
+
+.u-mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.u-my-auto {
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+}
+
+/* ==========================================
+   DISPLAY UTILITIES
+   ========================================== */
+
+.u-hidden {
+    display: none !important;
+}
+
+.u-block {
+    display: block !important;
+}
+
+.u-inline {
+    display: inline !important;
+}
+
+.u-inline-block {
+    display: inline-block !important;
+}
+
+.u-flex {
+    display: flex !important;
+}
+
+.u-inline-flex {
+    display: inline-flex !important;
+}
+
+.u-grid {
+    display: grid !important;
+}
+
+/* ==========================================
+   FLEXBOX UTILITIES
+   ========================================== */
+
+.u-flex-row {
+    flex-direction: row !important;
+}
+
+.u-flex-column {
+    flex-direction: column !important;
+}
+
+.u-justify-start {
+    justify-content: flex-start !important;
+}
+
+.u-justify-center {
+    justify-content: center !important;
+}
+
+.u-justify-end {
+    justify-content: flex-end !important;
+}
+
+.u-justify-between {
+    justify-content: space-between !important;
+}
+
+.u-align-start {
+    align-items: flex-start !important;
+}
+
+.u-align-center {
+    align-items: center !important;
+}
+
+.u-align-end {
+    align-items: flex-end !important;
+}
+
+.u-flex-wrap {
+    flex-wrap: wrap !important;
+}
+
+.u-flex-nowrap {
+    flex-wrap: nowrap !important;
+}
+
+/* ==========================================
+   TEXT UTILITIES
+   ========================================== */
+
+.u-text-left {
+    text-align: left !important;
+}
+
+.u-text-center {
+    text-align: center !important;
+}
+
+.u-text-right {
+    text-align: right !important;
+}
+
+.u-font-bold {
+    font-weight: $font-weight-bold !important;
+}
+
+.u-font-medium {
+    font-weight: $font-weight-medium !important;
+}
+
+.u-font-regular {
+    font-weight: $font-weight-regular !important;
+}
+
+.u-text-uppercase {
+    text-transform: uppercase !important;
+}
+
+.u-text-lowercase {
+    text-transform: lowercase !important;
+}
+
+.u-text-capitalize {
+    text-transform: capitalize !important;
+}
+
+/* ==========================================
+   BORDER RADIUS UTILITIES
+   ========================================== */
+
+.u-rounded {
+    border-radius: $border-radius !important;
+}
+
+.u-rounded-sm {
+    border-radius: $border-radius-sm !important;
+}
+
+.u-rounded-lg {
+    border-radius: $border-radius-lg !important;
+}
+
+.u-rounded-xl {
+    border-radius: $border-radius-xl !important;
+}
+
+.u-rounded-full {
+    border-radius: 9999px !important;
+}
+
+/* ==========================================
+   SHADOW UTILITIES
+   ========================================== */
+
+.u-shadow-sm {
+    box-shadow: $shadow-sm !important;
+}
+
+.u-shadow-md {
+    box-shadow: $shadow-md !important;
+}
+
+.u-shadow-lg {
+    box-shadow: $shadow-lg !important;
+}
+
+.u-shadow-xl {
+    box-shadow: $shadow-xl !important;
+}
+
+.u-shadow-none {
+    box-shadow: none !important;
+}
+
+/* ==========================================
+   WIDTH UTILITIES
+   ========================================== */
+
+.u-w-full {
+    width: 100% !important;
+}
+
+.u-w-auto {
+    width: auto !important;
+}
+
+.u-h-full {
+    height: 100% !important;
+}
+
+.u-h-auto {
+    height: auto !important;
+}
+
+/* ==========================================
+   POSITION UTILITIES
+   ========================================== */
+
+.u-relative {
+    position: relative !important;
+}
+
+.u-absolute {
+    position: absolute !important;
+}
+
+.u-fixed {
+    position: fixed !important;
+}
+
+.u-sticky {
+    position: sticky !important;
+}
+
+/* ==========================================
+   CURSOR UTILITIES
+   ========================================== */
+
+.u-cursor-pointer {
+    cursor: pointer !important;
+}
+
+.u-cursor-not-allowed {
+    cursor: not-allowed !important;
+}

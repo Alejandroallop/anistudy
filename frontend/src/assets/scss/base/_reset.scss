@@ -1,0 +1,90 @@
+/* ==========================================
+   RESET - MODERN CSS RESET
+   ========================================== */
+
+// Box Sizing
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+// Remove Default Margins
+* {
+    margin: 0;
+    padding: 0;
+}
+
+// Root Styles
+html {
+    height: 100%;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// Body Defaults
+body {
+    min-height: 100%;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+}
+
+// Improved Media Defaults
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+// Form Elements
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+// Remove Default Button Styles
+button {
+    cursor: pointer;
+}
+
+// Paragraph Orphans
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+// Remove List Styles
+ul,
+ol {
+    list-style: none;
+}
+
+// Links
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+// Table Reset
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+// Remove Default Fieldset Styling
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}

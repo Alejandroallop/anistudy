@@ -1,0 +1,80 @@
+<div class="l-dashboard">
+    <!-- SIDEBAR -->
+    <aside class="l-dashboard__sidebar">
+        <!-- USER PROFILE -->
+        <section class="c-user-profile">
+            <div class="c-user-profile__avatar">
+                <img src="/assets/images/avatar.png" alt="Usuario" class="c-user-profile__img" />
+            </div>
+            <h2 class="c-user-profile__name">{{ userName }}</h2>
+            <span class="c-user-profile__level">NIVEL 5</span>
+        </section>
+
+        <!-- NAVIGATION -->
+        <nav class="c-nav">
+            <ul class="c-nav__list">
+                <li class="c-nav__item">
+                    <a routerLink="home" routerLinkActive="c-nav__link--active" class="c-nav__link"
+                        aria-label="Ir a Inicio">
+                        <i class="pi pi-home c-nav__icon" aria-hidden="true"></i>
+                        <span class="c-nav__text">Inicio</span>
+                    </a>
+                </li>
+                <li class="c-nav__item">
+                    <a routerLink="missions" routerLinkActive="c-nav__link--active" class="c-nav__link"
+                        aria-label="Ir a Misiones">
+                        <i class="pi pi-flag c-nav__icon" aria-hidden="true"></i>
+                        <span class="c-nav__text">Misiones</span>
+                    </a>
+                </li>
+                <li class="c-nav__item">
+                    <a routerLink="grimoire" routerLinkActive="c-nav__link--active" class="c-nav__link"
+                        aria-label="Ir a Grimorio">
+                        <i class="pi pi-book c-nav__icon" aria-hidden="true"></i>
+                        <span class="c-nav__text">Grimorio</span>
+                    </a>
+                </li>
+                <li class="c-nav__item">
+                    <a routerLink="calendar" routerLinkActive="c-nav__link--active" class="c-nav__link"
+                        aria-label="Ir a Calendario">
+                        <i class="pi pi-calendar c-nav__icon" aria-hidden="true"></i>
+                        <span class="c-nav__text">Calendario</span>
+                    </a>
+                </li>
+                <li class="c-nav__item">
+                    <a routerLink="pomodoro" routerLinkActive="c-nav__link--active" class="c-nav__link"
+                        aria-label="Ir a Pomodoro">
+                        <i class="pi pi-clock c-nav__icon" aria-hidden="true"></i>
+                        <span class="c-nav__text">Pomodoro</span>
+                    </a>
+                </li>
+                <li class="c-nav__item">
+                    <a routerLink="chat" routerLinkActive="c-nav__link--active" class="c-nav__link"
+                        aria-label="Ir a Chat IA">
+                        <i class="pi pi-comments c-nav__icon" aria-hidden="true"></i>
+                        <span class="c-nav__text">Chat IA</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- SETTINGS & LOGOUT -->
+        <footer class="l-dashboard__sidebar-footer">
+            <button class="c-btn c-btn--settings" routerLink="settings" aria-label="Ir a Ajustes">
+                <i class="pi pi-cog" aria-hidden="true"></i>
+                <span>Ajustes</span>
+            </button>
+            <button class="c-btn c-btn--logout" (click)="onLogout()" aria-label="Cerrar sesión">
+                <i class="pi pi-sign-out" aria-hidden="true"></i>
+                <span>Salir</span>
+            </button>
+        </footer>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="l-dashboard__main">
+        <div class="l-dashboard__content">
+            <router-outlet></router-outlet>
+        </div>
+    </main>
+</div>

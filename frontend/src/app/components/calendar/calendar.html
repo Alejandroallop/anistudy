@@ -1,0 +1,131 @@
+<section class="c-calendar glass-panel">
+    <!-- CUSTOM HEADER -->
+    <header class="c-calendar__header">
+        <h2 class="c-calendar__title">{{ calendarTitle }}</h2>
+        <div class="c-calendar__controls">
+            <button (click)="handlePrev()" class="c-calendar__btn" aria-label="Mes anterior">
+                <i class="pi pi-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button (click)="handleToday()" class="c-calendar__btn c-calendar__btn--today" aria-label="Ir a hoy">
+                Hoy
+            </button>
+            <button (click)="handleNext()" class="c-calendar__btn" aria-label="Mes siguiente">
+                <i class="pi pi-chevron-right" aria-hidden="true"></i>
+            </button>
+        </div>
+        <button class="c-calendar__add-btn" (click)="openModal()" aria-label="Añadir nuevo evento">
+            <i class="pi pi-plus" aria-hidden="true"></i>
+            <span>Nuevo Evento</span>
+        </button>
+    </header>
+
+    <!-- MAIN GRID -->
+    <div class="c-calendar__grid">
+        <!-- FULLCALENDAR WIDGET -->
+        <article class="c-calendar__widget">
+            <full-calendar #calendar [options]="calendarOptions" class="c-calendar__fullcalendar"></full-calendar>
+        </article>
+
+        <!-- UPCOMING EVENTS PANEL -->
+        <aside class="c-events">
+            <header class="c-events__header">
+                <h3 class="c-events__title">
+                    <i class="pi pi-clock" aria-hidden="true"></i>
+                    Próximos Eventos
+                </h3>
+            </header>
+
+            <div class="c-events__list">
+                <article *ngFor="let event of upcomingEvents" class="c-event"
+                    [style.border-left-color]="event.backgroundColor">
+                    <div class="c-event__badge">
+                        <span class="c-event__day">{{ formatDate(event.start).split(' ')[1] }}</span>
+                        <span class="c-event__month">{{ formatDate(event.start).split(' ')[2] }}</span>
+                    </div>
+                    <div class="c-event__details">
+                        <h4 class="c-event__title">{{ event.title }}</h4>
+                        <p class="c-event__time">
+                            <i class="pi pi-calendar" aria-hidden="true"></i>
+                            {{ formatDate(event.start) }}
+                        </p>
+                    </div>
+                </article>
+            </div>
+
+            <!-- LEGEND -->
+            <footer class="c-legend">
+                <h4 class="c-legend__title">Categorías</h4>
+                <div class="c-legend__items">
+                    <div class="c-legend__item">
+                        <span class="c-legend__color c-legend__color--exam"></span>
+                        <span class="c-legend__label">Exámenes</span>
+                    </div>
+                    <div class="c-legend__item">
+                        <span class="c-legend__color c-legend__color--delivery"></span>
+                        <span class="c-legend__label">Entregas</span>
+                    </div>
+                    <div class="c-legend__item">
+                        <span class="c-legend__color c-legend__color--class"></span>
+                        <span class="c-legend__label">Clases</span>
+                    </div>
+                </div>
+            </footer>
+        </aside>
+    </div>
+</section>
+
+<!-- MODAL -->
+<div class="c-modal" #modalOverlay [style.display]="isModalOpen ? 'flex' : 'none'" (click)="closeModal()">
+    <article class="c-modal__content" (click)="$event.stopPropagation()">
+        <header class="c-modal__header">
+            <h2 class="c-modal__title">✨ Nuevo Evento</h2>
+            <button class="c-modal__close" (click)="closeModal()" aria-label="Cerrar modal">
+                <i class="pi pi-times" aria-hidden="true"></i>
+            </button>
+        </header>
+
+        <form class="c-modal__form" (ngSubmit)="addEvent()">
+            <div class="c-modal__field">
+                <label for="eventTitle" class="c-modal__label">
+                    <i class="pi pi-tag" aria-hidden="true"></i>
+                    Título del Evento
+                </label>
+                <input pInputText id="eventTitle" type="text" [(ngModel)]="newTitle" name="title"
+                    placeholder="Ej: Examen de Matemáticas" class="c-modal__input" required />
+            </div>
+
+            <div class="c-modal__field">
+                <label for="eventDate" class="c-modal__label">
+                    <i class="pi pi-calendar" aria-hidden="true"></i>
+                    Fecha
+                </label>
+                <input pInputText id="eventDate" type="date" [(ngModel)]="newDate" name="date" class="c-modal__input"
+                    required />
+            </div>
+
+            <div class="c-modal__field">
+                <label for="eventType" class="c-modal__label">
+                    <i class="pi pi-bookmark" aria-hidden="true"></i>
+                    Tipo de Evento
+                </label>
+                <select id="eventType" [(ngModel)]="newType" name="type" class="c-modal__select">
+                    <option value="exam">Examen</option>
+                    <option value="delivery">Entrega</option>
+                    <option value="class">Clase</option>
+                </select>
+            </div>
+
+            <div class="c-modal__actions">
+                <button type="submit" pButton class="c-modal__btn c-modal__btn--primary" aria-label="Guardar evento">
+                    <i class="pi pi-check" aria-hidden="true"></i>
+                    <span>Guardar</span>
+                </button>
+                <button type="button" pButton class="c-modal__btn c-modal__btn--secondary" (click)="closeModal()"
+                    aria-label="Cancelar">
+                    <i class="pi pi-times" aria-hidden="true"></i>
+                    <span>Cancelar</span>
+                </button>
+            </div>
+        </form>
+    </article>
+</div>

@@ -1,0 +1,662 @@
+/* ==========================================
+   CALENDAR COMPONENT - BEM STRICT + FULLCALENDAR CUSTOM
+   ========================================== */
+
+@use 'sass:map';
+@use 'sass:color';
+@use '../../../assets/scss/abstracts/variables' as *;
+@use '../../../assets/scss/abstracts/mixins' as *;
+
+/* ==========================================
+   COMPONENT: c-calendar (Main Container)
+   ========================================== */
+.c-calendar {
+    width: 100%;
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    color: #1e293b;
+}
+
+/* Glass panel effect - CHANGED TO SOLID WHITE */
+.glass-panel {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+    /* FullCalendar CSS Variables for Light Mode */
+    ::ng-deep {
+        --fc-border-color: #e2e8f0;
+        --fc-page-bg-color: #ffffff;
+        --fc-neutral-bg-color: #f8fafc;
+        --fc-list-event-hover-bg-color: #f1f5f9;
+        --fc-today-bg-color: rgba(255, 71, 126, 0.1);
+    }
+}
+
+/* ==========================================
+   CUSTOM HEADER
+   ========================================== */
+.c-calendar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    /* Z-INDEX FIX: Ensure header is above calendar */
+    position: relative;
+    z-index: 50;
+    pointer-events: auto;
+}
+
+.c-calendar__header-info {
+    flex: 1;
+}
+
+.c-calendar__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e293b;
+    flex: 1;
+    min-width: 200px;
+}
+
+.c-calendar__controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.c-calendar__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    /* Z-INDEX FIX: Ensure buttons are clickable */
+    position: relative;
+    z-index: 51;
+    pointer-events: auto;
+}
+
+.c-calendar__btn:hover {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    color: #0f172a;
+    transform: translateY(-2px);
+}
+
+.c-calendar__btn--today {
+    background: rgba(255, 71, 126, 0.1);
+    border-color: map.get($theme-colors, 'primary');
+    color: map.get($theme-colors, 'primary');
+    font-weight: 600;
+}
+
+.c-calendar__btn--today:hover {
+    background: map.get($theme-colors, 'primary');
+    border-color: map.get($theme-colors, 'primary');
+    color: white;
+}
+
+.c-calendar__add-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #FF477E 0%, #7000FF 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 71, 126, 0.4);
+    transition: all $transition-normal;
+}
+
+.c-calendar__add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 71, 126, 0.5);
+}
+
+/* ==========================================
+   LAYOUT: c-calendar__grid
+   ========================================== */
+.c-calendar__grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+
+    /* Z-INDEX: Lower than header */
+    position: relative;
+    z-index: 1;
+}
+
+.c-calendar__widget {
+    min-height: 600px;
+
+    /* Z-INDEX: Lower stacking */
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================
+   FULLCALENDAR DEEP STYLING
+   ========================================== */
+.c-calendar ::ng-deep .fc {
+
+    /* Table styling - SHOW BORDERS */
+    .fc-theme-standard td,
+    .fc-theme-standard th {
+        border: 1px solid var(--fc-border-color, #e2e8f0);
+    }
+
+    .fc-theme-standard .fc-scrollgrid {
+        border: 1px solid var(--fc-border-color, #e2e8f0);
+    }
+
+    /* Background - WHITE MODE */
+    background: transparent;
+    color: #1e293b;
+
+    /* Header row (días de la semana) - DARK TEXT */
+    .fc-col-header-cell {
+        background: #f8fafc;
+        padding: 12px 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .fc-col-header-cell-cushion {
+        color: #333;
+        font-weight: 600;
+    }
+
+    /* Day cells - WHITE MODE */
+    .fc-daygrid-day {
+        background: #ffffff;
+        transition: all $transition-fast;
+        min-height: 100px;
+    }
+
+    .fc-daygrid-day:hover {
+        background: #f1f5f9;
+        cursor: pointer;
+    }
+
+    /* Day number - DARK TEXT */
+    .fc-daygrid-day-number {
+        color: #444;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 8px;
+    }
+
+    /* Today highlight */
+    .fc-day-today {
+        background: rgba(255, 71, 126, 0.1) !important;
+        border-color: map.get($theme-colors, 'primary') !important;
+    }
+
+    .fc-day-today .fc-daygrid-day-number {
+        background: map.get($theme-colors, 'primary');
+        color: white;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Other month days (inactive) */
+    .fc-day-other {
+        background: #fafafa;
+
+        .fc-daygrid-day-number {
+            color: #bbb;
+            opacity: 0.6;
+        }
+    }
+
+    /* Events */
+    .fc-event {
+        border: none;
+        border-radius: 6px;
+        padding: 4px 8px;
+        margin: 2px 4px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: all $transition-fast;
+        cursor: pointer;
+    }
+
+    .fc-event:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .fc-daygrid-event-dot {
+        display: none;
+    }
+
+    /* Event title */
+    .fc-event-title {
+        font-weight: 600;
+    }
+
+    /* More link */
+    .fc-daygrid-more-link {
+        color: map.get($theme-colors, 'primary');
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .fc-daygrid-more-link:hover {
+        text-decoration: underline;
+    }
+}
+
+/* ==========================================
+   COMPONENT: c-events (Upcoming Events Panel)
+   ========================================== */
+.c-events {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.c-events__header {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 12px;
+}
+
+.c-events__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.c-events__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+/* ==========================================
+   COMPONENT: c-event (Event Item)
+   ========================================== */
+.c-event {
+    background: #ffffff;
+    border-left: 4px solid map.get($theme-colors, 'primary');
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    gap: 12px;
+    transition: all $transition-fast;
+}
+
+.c-event:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.c-event__badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 8px;
+    min-width: 50px;
+}
+
+.c-event__day {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: map.get($theme-colors, 'dark');
+    line-height: 1;
+}
+
+.c-event__month {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: map.get($theme-colors, 'primary');
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.c-event__details {
+    flex: 1;
+}
+
+.c-event__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.c-event__time {
+    font-size: 0.875rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ==========================================
+   COMPONENT: c-legend (Color Legend)
+   ========================================== */
+.c-legend {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+}
+
+.c-legend__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.c-legend__items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.c-legend__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.c-legend__color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.c-legend__color--exam {
+    background: #FF477E;
+}
+
+.c-legend__color--delivery {
+    background: #4A90E2;
+}
+
+.c-legend__color--class {
+    background: #10B981;
+}
+
+.c-legend__label {
+    font-size: 0.875rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+/* ==========================================
+   COMPONENT: c-modal (Modal Overlay)
+   ========================================== */
+.c-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.c-modal__content {
+    @include glass(0.15, 15px);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.c-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.c-modal__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.c-modal__close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all $transition-fast;
+}
+
+.c-modal__close:hover {
+    background: rgba(255, 71, 126, 0.3);
+    transform: rotate(90deg);
+}
+
+.c-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.c-modal__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.c-modal__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.c-modal__input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: all $transition-fast;
+}
+
+.c-modal__input:focus {
+    outline: none;
+    border-color: map.get($theme-colors, 'primary');
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.c-modal__input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.c-modal__select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all $transition-fast;
+}
+
+.c-modal__select:focus {
+    outline: none;
+    border-color: map.get($theme-colors, 'primary');
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.c-modal__select option {
+    background: map.get($theme-colors, 'dark');
+    color: white;
+}
+
+.c-modal__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.c-modal__btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all $transition-normal;
+}
+
+.c-modal__btn--primary {
+    background: linear-gradient(135deg, #FF477E 0%, #7000FF 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 71, 126, 0.4);
+}
+
+.c-modal__btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 71, 126, 0.5);
+}
+
+.c-modal__btn--secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.c-modal__btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 1024px) {
+    .c-calendar__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .c-events {
+        max-height: 400px;
+    }
+
+    .c-events__list {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .c-calendar {
+        padding: 16px;
+    }
+
+    .c-calendar__title {
+        font-size: 1.25rem;
+        min-width: auto;
+    }
+
+    .c-calendar__header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .c-calendar__controls {
+        justify-content: center;
+    }
+
+    .c-calendar__add-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .c-modal__content {
+        padding: 24px;
+    }
+
+    .c-modal__actions {
+        flex-direction: column;
+    }
+
+    /* FullCalendar mobile adjustments */
+    .c-calendar ::ng-deep .fc {
+        .fc-daygrid-day {
+            min-height: 70px;
+        }
+
+        .fc-daygrid-day-number {
+            font-size: 0.875rem;
+        }
+
+        .fc-event {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+        }
+    }
+}

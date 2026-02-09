@@ -1,0 +1,21 @@
+/* ==========================================
+   ANISTUDY - GLOBAL STYLES ENTRY POINT
+   ========================================== */
+
+// Import Main SCSS Architecture
+@use 'assets/scss/main';
+
+/* 
+  All styles are now organized following the 7-1 Architecture:
+  
+  src/assets/scss/
+  ├── abstracts/
+  │   ├── _variables.scss  (Theme colors, spacing, etc.)
+  │   └── _mixins.scss     (Glass effect, flexbox, etc.)
+  ├── base/
+  │   ├── _reset.scss      (CSS reset)
+  │   └── _typography.scss (Font styles)
+  ├── utilities/
+  │   └── _utilities.scss  (Helper classes)
+  └── main.scss            (Main entry point)
+*/

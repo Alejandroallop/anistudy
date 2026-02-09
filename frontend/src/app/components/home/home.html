@@ -1,0 +1,157 @@
+<!-- Header con Saludo y Notificaciones -->
+<header class="dashboard-header">
+    <div class="greeting">
+        <h1 class="greeting-title">¡Konnichiwa, {{ userName }}! 🌸</h1>
+        <p class="greeting-subtitle">頑張って！ (¡Haz tu mejor esfuerzo!)</p>
+    </div>
+    <div class="notification-pill">
+        <i class="pi pi-bell"></i>
+        <span>Tienes 3 notificaciones nuevas</span>
+    </div>
+</header>
+
+<!-- Fila de Estadísticas (Stats Cards) -->
+<section class="stats-row">
+    <!-- Card 1: Racha -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon fire">
+                <i class="pi pi-bolt"></i>
+            </div>
+            <span class="stat-label">Racha</span>
+        </div>
+        <p class="stat-value">12 Días</p>
+        <p class="stat-caption">¡Sigue así! 🔥</p>
+    </div>
+
+    <!-- Card 2: Experiencia -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon star">
+                <i class="pi pi-star"></i>
+            </div>
+            <span class="stat-label">Experiencia</span>
+        </div>
+        <p class="stat-value">450 XP</p>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 75%"></div>
+        </div>
+        <p class="stat-caption">50 XP para subir de nivel</p>
+    </div>
+
+    <!-- Card 3: Enfoque -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon clock">
+                <i class="pi pi-clock"></i>
+            </div>
+            <span class="stat-label">Enfoque</span>
+        </div>
+        <p class="stat-value">4h 20m</p>
+        <p class="stat-caption">Tiempo hoy</p>
+    </div>
+
+    <!-- Card 4: Modo Zen (Rosa) -->
+    <div class="zen-card">
+        <div class="zen-content">
+            <h3 class="zen-title">Modo Zen</h3>
+            <p class="zen-subtitle">Activa tu mejor enfoque</p>
+            <button class="zen-play-btn">
+                <i class="pi pi-play"></i>
+                <span>Iniciar</span>
+            </button>
+        </div>
+        <div class="zen-decoration">
+            <i class="pi pi-sparkles"></i>
+        </div>
+    </div>
+</section>
+
+<!-- Grid Inferior: Misiones + Próximo Evento -->
+<section class="bottom-grid">
+    <!-- Panel Izquierda: Misiones -->
+    <div class="missions-panel card-white">
+        <div class="panel-header">
+            <h3 class="panel-title">
+                <i class="pi pi-flag"></i>
+                Misiones Activas
+            </h3>
+            <span class="task-count">2/5</span>
+        </div>
+
+        <div class="missions-list">
+            <!-- Misión 1 -->
+            <div class="mission-item">
+                <div class="mission-info">
+                    <div class="mission-icon math">
+                        <i class="pi pi-calculator"></i>
+                    </div>
+                    <div class="mission-details">
+                        <h4 class="mission-name">Matemáticas</h4>
+                        <p class="mission-desc">Completar ejercicios 1-10</p>
+                    </div>
+                </div>
+                <div class="mission-progress">
+                    <span class="progress-text">7/10</span>
+                    <div class="progress-bar small">
+                        <div class="progress-fill" style="width: 70%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Misión 2 -->
+            <div class="mission-item">
+                <div class="mission-info">
+                    <div class="mission-icon history">
+                        <i class="pi pi-book"></i>
+                    </div>
+                    <div class="mission-details">
+                        <h4 class="mission-name">Historia</h4>
+                        <p class="mission-desc">Leer capítulo 5</p>
+                    </div>
+                </div>
+                <div class="mission-progress">
+                    <span class="progress-text">3/5</span>
+                    <div class="progress-bar small">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="view-all-btn">Ver todas las misiones →</button>
+    </div>
+
+    <!-- Panel Derecha: Próximo Evento -->
+    <div class="event-panel card-white">
+        <div class="panel-header">
+            <h3 class="panel-title">
+                <i class="pi pi-calendar"></i>
+                Próximo Evento
+            </h3>
+        </div>
+
+        <div class="event-card">
+            <div class="event-date">
+                <span class="date-day">15</span>
+                <span class="date-month">MAR</span>
+            </div>
+            <div class="event-info">
+                <h4 class="event-title">Examen de Biología</h4>
+                <p class="event-time">
+                    <i class="pi pi-clock"></i>
+                    10:00 AM - Sala 203
+                </p>
+                <div class="event-tags">
+                    <span class="event-tag">Importante</span>
+                    <span class="event-tag">Ciencias</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="countdown">
+            <i class="pi pi-hourglass"></i>
+            <span>Faltan 3 días</span>
+        </div>
+    </div>
+</section>

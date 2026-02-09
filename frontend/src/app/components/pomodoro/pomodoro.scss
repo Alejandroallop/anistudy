@@ -1,0 +1,352 @@
+/* ==========================================
+   POMODORO COMPONENT - BEM STRICT
+   ========================================== */
+
+@use 'sass:map';
+@use 'sass:color';
+@use '../../../assets/scss/abstracts/variables' as *;
+@use '../../../assets/scss/abstracts/mixins' as *;
+
+/* ==========================================
+   LAYOUT: l-pomodoro (Main Container)
+   ========================================== */
+.l-pomodoro {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    gap: 32px;
+
+    /* Background image */
+    background-image: url('/assets/images/pomodoro.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.l-pomodoro__header {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.l-pomodoro__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.l-pomodoro__subtitle {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+}
+
+/* ==========================================
+   COMPONENT: c-mode-badge
+   ========================================== */
+.c-mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #FF477E 0%, #7000FF 100%);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(255, 71, 126, 0.4);
+}
+
+.c-mode-badge__icon {
+    font-size: 14px;
+}
+
+.c-mode-badge__text {
+    text-transform: uppercase;
+}
+
+/* ==========================================
+   COMPONENT: c-timer (Timer Card)
+   ========================================== */
+.c-timer {
+    @include glass();
+    width: 100%;
+    max-width: 600px;
+    padding: 48px 32px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+.c-timer__display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.c-timer__block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.c-timer__time {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+    text-shadow: 0 4px 20px rgba(255, 71, 126, 0.5);
+}
+
+.c-timer__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 2px;
+    margin-top: 8px;
+    text-transform: uppercase;
+}
+
+.c-timer__separator {
+    font-size: 4rem;
+    font-weight: 700;
+    color: white;
+    opacity: 0.5;
+}
+
+.c-timer__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    width: 100%;
+}
+
+/* ==========================================
+   ELEMENT: c-timer__button (Buttons)
+   ========================================== */
+.c-timer__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all $transition-normal;
+    font-family: $font-family-base;
+}
+
+.c-timer__button--primary {
+    background: linear-gradient(135deg, #FF477E 0%, #7000FF 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 71, 126, 0.4);
+    flex: 1;
+    min-width: 200px;
+}
+
+.c-timer__button--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 71, 126, 0.5);
+}
+
+.c-timer__button--primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.c-timer__button--secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.c-timer__button--secondary:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.c-timer__button--secondary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.c-timer__button--reset {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 2px solid rgba(231, 76, 60, 0.4);
+}
+
+.c-timer__button--reset:hover {
+    background: #e74c3c;
+    color: white;
+    border-color: #e74c3c;
+    transform: translateY(-2px);
+}
+
+.c-timer__button--reset:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ==========================================
+   COMPONENT: c-music (Music Widget)
+   ========================================== */
+.c-music {
+    @include glass();
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    border-radius: 16px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.c-music__album {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform $transition-normal;
+}
+
+.c-music__album--spinning {
+    animation: spin 3s linear infinite;
+}
+
+.c-music__info {
+    flex: 1;
+}
+
+.c-music__track {
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.c-music__artist {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.c-music__button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF477E 0%, #7000FF 100%);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 71, 126, 0.4);
+    transition: all $transition-normal;
+}
+
+.c-music__button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(255, 71, 126, 0.5);
+}
+
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 768px) {
+    .l-pomodoro__title {
+        font-size: 2rem;
+    }
+
+    .c-timer {
+        padding: 32px 24px;
+    }
+
+    .c-timer__time {
+        font-size: 3.5rem;
+    }
+
+    .c-timer__separator {
+        font-size: 3rem;
+    }
+
+    .c-timer__controls {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .c-timer__button {
+        width: 100%;
+    }
+
+    .c-timer__button--primary {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .l-pomodoro {
+        padding: 16px;
+    }
+
+    .l-pomodoro__title {
+        font-size: 1.5rem;
+    }
+
+    .c-timer__time {
+        font-size: 2.5rem;
+    }
+
+    .c-timer__separator {
+        font-size: 2rem;
+    }
+
+    .c-music {
+        padding: 12px 16px;
+    }
+
+    .c-music__album {
+        width: 50px;
+        height: 50px;
+    }
+
+    .c-music__button {
+        width: 40px;
+        height: 40px;
+    }
+}
