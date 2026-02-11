@@ -1,1 +1,120 @@
-<p>profile works!</p>
+<section class="c-profile glass-panel">
+    <!-- HEADER MOVILE ONLY -->
+    <header class="c-profile__header-mobile">
+        <h2>Perfil de Personaje</h2>
+    </header>
+
+    <div class="c-profile__grid">
+
+        <!-- COLUMNA IZQUIERDA: CHARACTER CARD -->
+        <aside class="c-character-card">
+            <div class="c-character-card__image-wrapper">
+                <img [src]="user.avatar" alt="Avatar" class="c-character-card__image">
+            </div>
+            <div class="c-character-card__overlay">
+                <span class="c-character-card__badge">Estado: Concentrado</span>
+                <h2 class="c-character-card__name">{{ user.name }}</h2>
+                <p class="c-character-card__title">{{ user.title }}</p>
+                <div class="c-character-card__class">Clase: Erudito</div>
+            </div>
+        </aside>
+
+        <!-- COLUMNA DERECHA: STATS DASHBOARD -->
+        <main class="c-stats-dashboard">
+
+            <!-- NIVEL & XP -->
+            <header class="c-stats-header">
+                <div class="c-level-circle">
+                    <span class="c-level-circle__number">{{ user.level }}</span>
+                    <span class="c-level-circle__label">NIVEL</span>
+                </div>
+                <div class="c-xp-container">
+                    <div class="c-xp-info">
+                        <h3 class="c-xp-title">Progreso de Nivel</h3>
+                        <span class="c-xp-values">{{ user.xp.current }} / {{ user.xp.next }} XP</span>
+                    </div>
+                    <div class="c-progress-bar">
+                        <div class="c-progress-bar__fill" [style.width.%]="xpPercentage"></div>
+                    </div>
+                    <p class="c-xp-next">Próximo Nivel: Maestro de Notas</p>
+                </div>
+            </header>
+
+            <!-- STATS GENERALES -->
+            <div class="c-stats-grid">
+                <div class="c-stat-card">
+                    <h4 class="c-stat-card__title">HORAS TOTALES</h4>
+                    <span class="c-stat-card__value">{{ user.stats.hours }}h</span>
+                    <span class="c-stat-card__badge c-stat-card__badge--green">+12%</span>
+                </div>
+                <div class="c-stat-card">
+                    <h4 class="c-stat-card__title">TAREAS</h4>
+                    <span class="c-stat-card__value">{{ user.stats.tasks }}</span>
+                    <span class="c-stat-card__desc">Completadas</span>
+                </div>
+                <div class="c-stat-card">
+                    <h4 class="c-stat-card__title">RACHA DE DÍAS</h4>
+                    <div class="c-stat-card__streak">
+                        <span class="c-stat-card__value">{{ user.stats.streak }}</span>
+                        <i class="pi pi-fire c-stat-card__icon"></i>
+                    </div>
+                    <div class="c-progress-bar c-progress-bar--small">
+                        <div class="c-progress-bar__fill c-progress-bar__fill--orange" style="width: 70%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ATRIBUTOS RPG -->
+            <section class="c-attributes">
+                <h3 class="c-section-title"><i class="pi pi-star"></i> Atributos</h3>
+
+                <div class="c-attribute-row">
+                    <div class="c-attribute-info">
+                        <span class="c-attribute-name">Inteligencia (INT)</span>
+                        <span class="c-attribute-value">{{ user.attributes.intelligence }}/100</span>
+                    </div>
+                    <div class="c-progress-bar">
+                        <div class="c-progress-bar__fill c-progress-bar__fill--blue"
+                            [style.width.%]="user.attributes.intelligence"></div>
+                    </div>
+                </div>
+
+                <div class="c-attribute-row">
+                    <div class="c-attribute-info">
+                        <span class="c-attribute-name">Disciplina (DIS)</span>
+                        <span class="c-attribute-value">{{ user.attributes.discipline }}/100</span>
+                    </div>
+                    <div class="c-progress-bar">
+                        <div class="c-progress-bar__fill c-progress-bar__fill--green"
+                            [style.width.%]="user.attributes.discipline"></div>
+                    </div>
+                </div>
+
+                <div class="c-attribute-row">
+                    <div class="c-attribute-info">
+                        <span class="c-attribute-name">Creatividad (CRE)</span>
+                        <span class="c-attribute-value">{{ user.attributes.creativity }}/100</span>
+                    </div>
+                    <div class="c-progress-bar">
+                        <div class="c-progress-bar__fill c-progress-bar__fill--pink"
+                            [style.width.%]="user.attributes.creativity"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LOGROS / INVENTARIO -->
+            <section class="c-achievements">
+                <h3 class="c-section-title"><i class="pi pi-box"></i> Logros Recientes</h3>
+                <div class="c-achievement-list">
+                    <div class="c-achievement-item" *ngFor="let icon of user.achievements">
+                        <i [class]="icon"></i>
+                    </div>
+                    <div class="c-achievement-item c-achievement-item--add">
+                        <i class="pi pi-plus"></i>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</section>

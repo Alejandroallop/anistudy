@@ -1,6 +1,6 @@
 <main class="c-login">
     <!-- PANEL DE LOGIN (GLASSMORPHISM) -->
-    <article class="c-login__card">
+    <article class="c-login__card" [class.c-login__card--single]="isLoginMode">
         <!-- COLUMNA IZQUIERDA: FORMULARIO -->
         <section class="c-login__form-section">
             <!-- HEADER: Logo y Títulos -->
@@ -9,14 +9,22 @@
                     <img src="/assets/images/logo.png" alt="AniStudy Logo" class="c-login__logo" />
                     <span class="c-login__brand">AniStudy</span>
                 </div>
-                <h1 class="c-login__title">Bienvenido a <span class="c-login__title--highlight">AniStudy</span></h1>
-                <p class="c-login__subtitle">Tu aventura de productividad comienza aquí.</p>
+                <h1 class="c-login__title">{{ isLoginMode ? 'Bienvenido a' : 'Únete a' }} <span
+                        class="c-login__title--highlight">AniStudy</span></h1>
+                <p class="c-login__subtitle">{{ isLoginMode ? 'Tu aventura de productividad comienza aquí.' : 'Crea tu
+                    cuenta y empieza a subir de nivel.' }}</p>
+
+                <!-- ERROR MESSAGE -->
+                <div *ngIf="errorMessage" class="c-login__error">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span>{{ errorMessage }}</span>
+                </div>
             </header>
 
             <!-- FORMULARIO -->
-            <form [formGroup]="loginForm" class="c-login__form" (ngSubmit)="onLogin()">
-                <!-- Name Input -->
-                <div class="c-login__group">
+            <form [formGroup]="loginForm" class="c-login__form" (ngSubmit)="onSubmit()">
+                <!-- Name Input (Only for Register) -->
+                <div class="c-login__group" *ngIf="!isLoginMode">
                     <label for="name" class="c-login__label">Nombre del Estudiante</label>
                     <span class="c-login__input-wrapper">
                         <i class="pi pi-user c-login__input-icon" aria-hidden="true"></i>
@@ -48,9 +56,15 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" pButton class="c-login__btn c-login__btn--primary" aria-label="Iniciar sesión">
-                    <i class="pi pi-sign-in" aria-hidden="true"></i>
-                    <span>Entrar al Dashboard</span>
+                <button type="submit" pButton class="c-login__btn c-login__btn--primary"
+                    [attr.aria-label]="isLoginMode ? 'Iniciar sesión' : 'Registrarse'">
+                    <i [class]="isLoginMode ? 'pi pi-sign-in' : 'pi pi-user-plus'" aria-hidden="true"></i>
+                    <span>{{ isLoginMode ? 'Entrar al Dashboard' : 'Registrarse' }}</span>
+                </button>
+
+                <!-- Toggle Mode Button -->
+                <button type="button" class="c-login__toggle-btn" (click)="toggleMode()">
+                    {{ isLoginMode ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión' }}
                 </button>
 
                 <!-- Demo Button -->
@@ -69,8 +83,8 @@
             </footer>
         </section>
 
-        <!-- COLUMNA DERECHA: AVATARS -->
-        <aside class="c-login__avatar-section">
+        <!-- COLUMNA DERECHA: AVATARS (Solo en Registro) -->
+        <aside class="c-login__avatar-section" *ngIf="!isLoginMode">
             <header class="c-login__avatar-header">
                 <i class="pi pi-user-plus c-login__avatar-icon" aria-hidden="true"></i>
                 <h2 class="c-login__avatar-title">Elige tu Avatar</h2>

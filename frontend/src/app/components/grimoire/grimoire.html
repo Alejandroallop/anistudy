@@ -1,7 +1,42 @@
-<div class="placeholder-container">
-    <div class="placeholder-card">
-        <i class="pi pi-book placeholder-icon"></i>
-        <h2 class="placeholder-title">Grimorio</h2>
-        <p class="placeholder-text">Tu libro de conocimientos próximamente...</p>
+<section class="c-grimoire glass-panel">
+    <header class="c-grimoire__header">
+        <h2>📚 Grimorio de Conocimientos</h2>
+        <div class="c-grimoire__search">
+            <i class="pi pi-search"></i>
+            <input type="text" class="c-grimoire__search-input" placeholder="Buscar hechizo..."
+                [(ngModel)]="searchTerm">
+        </div>
+    </header>
+
+    <div class="c-grimoire__grid">
+        <article class="c-resource-card" *ngFor="let resource of filteredResources" [attr.data-type]="resource.type">
+
+            <div class="c-resource-card__icon-wrapper">
+                <i [class]="resource.icon + ' c-resource-card__icon'" [ngClass]="{
+            'c-resource-card__icon--pdf': resource.type === 'PDF',
+            'c-resource-card__icon--video': resource.type === 'Video',
+            'c-resource-card__icon--link': resource.type === 'Link'
+          }"></i>
+            </div>
+
+            <div class="c-resource-card__content">
+                <span class="c-resource-card__type">{{ resource.type }}</span>
+                <h3 class="c-resource-card__title">{{ resource.name }}</h3>
+                <p class="c-resource-card__description">{{ resource.description }}</p>
+            </div>
+
+            <div class="c-resource-card__footer">
+                <a class="c-btn c-btn--secondary" [href]="resource.url" target="_blank" rel="noopener noreferrer">
+                    <i class="pi pi-external-link"></i>
+                    {{ resource.type === 'PDF' ? 'Leer' : resource.type === 'Video' ? 'Ver' : 'Abrir' }}
+                </a>
+            </div>
+        </article>
     </div>
-</div>
+
+    <!-- Mensaje cuando no hay resultados -->
+    <div class="c-grimoire__empty" *ngIf="filteredResources.length === 0">
+        <i class="pi pi-search c-grimoire__empty-icon"></i>
+        <p class="c-grimoire__empty-text">No se encontraron hechizos con "{{ searchTerm }}"</p>
+    </div>
+</section>

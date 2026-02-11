@@ -1,1 +1,70 @@
-<p>chat works!</p>
+<section class="c-chat glass-panel">
+    <!-- HEADER -->
+    <header class="c-chat__header">
+        <div class="c-chat__header-info">
+            <h2 class="c-chat__title">Sensei IA</h2>
+            <p class="c-chat__subtitle">Repaso para examen • Revolución Francesa</p>
+        </div>
+        <button class="c-chat__notification">
+            <i class="pi pi-bell"></i>
+        </button>
+    </header>
+
+    <!-- BODY -->
+    <div class="c-chat__body">
+        <!-- MESSAGES -->
+        <div class="c-chat__messages" #scrollMe>
+            <div *ngFor="let message of messages" class="c-message" [ngClass]="{
+          'c-message--ai': message.sender === 'ai',
+          'c-message--user': message.sender === 'user'
+        }">
+
+                <!-- AI MESSAGE -->
+                <div class="c-message__wrapper" *ngIf="message.sender === 'ai'">
+                    <img src="assets/images/sensei-avatar.png" alt="Sensei IA" class="c-message__avatar">
+
+                    <div class="c-message__content-wrapper">
+                        <span class="c-message__sender">Sensei IA</span>
+                        <div class="c-message__bubble c-message__bubble--ai">
+                            <p class="c-message__text">{{ message.content }}</p>
+                        </div>
+
+                        <!-- OPTIONS -->
+                        <div class="c-message__options" *ngIf="message.options && message.options.length > 0">
+                            <button *ngFor="let option of message.options" class="c-option-btn"
+                                (click)="selectOption(option)">
+                                {{ option }}
+                            </button>
+                        </div>
+
+                        <span class="c-message__time">{{ formatTime(message.timestamp) }}</span>
+                    </div>
+                </div>
+
+                <!-- USER MESSAGE -->
+                <div class="c-message__wrapper" *ngIf="message.sender === 'user'">
+                    <div class="c-message__content-wrapper">
+                        <div class="c-message__bubble c-message__bubble--user">
+                            <p class="c-message__text">{{ message.content }}</p>
+                        </div>
+                        <span class="c-message__time c-message__time--right">{{ formatTime(message.timestamp) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INPUT AREA -->
+    <footer class="c-chat__input-area">
+        <button class="c-chat__attach-btn">
+            <i class="pi pi-plus"></i>
+        </button>
+
+        <input type="text" class="c-chat__input" placeholder="Escribe tu respuesta aquí..." [(ngModel)]="newMessage"
+            (keyup.enter)="sendMessage()">
+
+        <button class="c-chat__send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+            <i class="pi pi-send"></i>
+        </button>
+    </footer>
+</section>

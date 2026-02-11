@@ -1,1 +1,88 @@
-<p>settings works!</p>
+<section class="c-settings glass-panel">
+    <!-- HEADER -->
+    <header class="c-settings__header">
+        <h2>⚙️ Ajustes</h2>
+    </header>
+
+    <!-- GRID -->
+    <div class="c-settings__grid">
+        <!-- COLUMNA 1: PERFIL -->
+        <article class="c-settings__card">
+            <h3 class="c-settings__card-title">👤 Perfil de Usuario</h3>
+
+            <div class="c-settings__profile">
+                <img src="assets/images/user-avatar.png" alt="Avatar" class="c-settings__avatar">
+
+                <div class="c-settings__form">
+                    <div class="c-settings__form-group">
+                        <label for="username" class="c-settings__label">Nombre de Usuario</label>
+                        <input type="text" id="username" class="c-settings__input" [(ngModel)]="username"
+                            placeholder="Tu nombre">
+                    </div>
+
+                    <div class="c-settings__form-group">
+                        <label for="email" class="c-settings__label">Correo Electrónico</label>
+                        <input type="email" id="email" class="c-settings__input" [(ngModel)]="email"
+                            placeholder="tu@email.com">
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- COLUMNA 2: PREFERENCIAS -->
+        <article class="c-settings__card">
+            <h3 class="c-settings__card-title">🎨 Preferencias</h3>
+
+            <div class="c-settings__toggles">
+                <!-- Toggle: Modo Oscuro -->
+                <div class="c-settings__toggle-item">
+                    <div class="c-settings__toggle-info">
+                        <span class="c-settings__toggle-label">🌙 Modo Oscuro</span>
+                        <span class="c-settings__toggle-desc">Cambia la interfaz a tema oscuro</span>
+                    </div>
+                    <label class="c-toggle">
+                        <input type="checkbox" [(ngModel)]="darkMode">
+                        <span class="c-toggle__slider"></span>
+                    </label>
+                </div>
+
+                <!-- Toggle: Notificaciones -->
+                <div class="c-settings__toggle-item">
+                    <div class="c-settings__toggle-info">
+                        <span class="c-settings__toggle-label">🔔 Notificaciones</span>
+                        <span class="c-settings__toggle-desc">Recibe alertas de tareas y eventos</span>
+                    </div>
+                    <label class="c-toggle">
+                        <input type="checkbox" [(ngModel)]="notifications">
+                        <span class="c-toggle__slider"></span>
+                    </label>
+                </div>
+
+                <!-- Toggle: Efectos de Sonido -->
+                <div class="c-settings__toggle-item">
+                    <div class="c-settings__toggle-info">
+                        <span class="c-settings__toggle-label">🔊 Sonidos de Efectos</span>
+                        <span class="c-settings__toggle-desc">Reproduce sonidos al completar misiones</span>
+                    </div>
+                    <label class="c-toggle">
+                        <input type="checkbox" [(ngModel)]="soundEffects">
+                        <span class="c-toggle__slider"></span>
+                    </label>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <!-- FOOTER: ACCIONES -->
+    <footer class="c-settings__footer">
+        <button class="c-btn c-btn--primary" (click)="saveChanges()">
+            <i class="pi pi-save"></i>
+            Guardar Cambios
+        </button>
+
+        <button class="c-btn c-btn--danger" (click)="logout()">
+            <i class="pi pi-sign-out"></i>
+            Cerrar Sesión
+        </button>
+    </footer>
+</section>

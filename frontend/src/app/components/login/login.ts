@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -28,9 +29,13 @@ export class Login implements OnInit {
     }
   ];
 
+  isLoginMode: boolean = true;
+  errorMessage: string = '';
+
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -42,10 +47,30 @@ export class Login implements OnInit {
    */
   private initForm(): void {
     this.loginForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
+      name: [''], // Validación dinámica
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+    // Inicializar estado del campo nombre
+    this.updateNameValidator();
+  }
+
+  toggleMode(): void {
+    this.isLoginMode = !this.isLoginMode;
+    this.errorMessage = '';
+    this.updateNameValidator();
+  }
+
+  private updateNameValidator(): void {
+    const nameControl = this.loginForm.get('name');
+    if (this.isLoginMode) {
+      nameControl?.clearValidators();
+      nameControl?.disable();
+    } else {
+      nameControl?.setValidators([Validators.required, Validators.minLength(2)]);
+      nameControl?.enable();
+    }
+    nameControl?.updateValueAndValidity();
   }
 
   /**
@@ -59,29 +84,52 @@ export class Login implements OnInit {
   /**
    * Login normal
    */
-  onLogin(): void {
+  onSubmit(): void {
+    console.log('✅ Botón pulsado, procesando modo:', this.isLoginMode);
+    
     if (this.loginForm.invalid) {
+      console.warn('⚠️ Formulario inválido:', this.loginForm);
+      Object.keys(this.loginForm.controls).forEach(key => {
+        const controlErrors = this.loginForm.get(key)?.errors;
+        if (controlErrors) {
+          console.error(`Error en campo ${key}:`, controlErrors);
+        }
+      });
       this.loginForm.markAllAsTouched();
       return;
     }
 
-    const credentials = {
-      name: this.loginForm.value.name,
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password,
-      avatar: this.selectedAvatar
-    };
+    this.errorMessage = '';
+    const formValue = this.loginForm.value;
+    let authObs;
 
-    console.log('Login con:', credentials);
+    if (this.isLoginMode) {
+      authObs = this.authService.login({
+        email: formValue.email,
+        password: formValue.password
+      });
+    } else {
+      authObs = this.authService.register({
+        name: formValue.name,
+        email: formValue.email,
+        password: formValue.password,
+        avatar: this.selectedAvatar,
+        // Default values
+        level: 1,
+        xp: 0
+      });
+    }
 
-    // Guardar nombre en localStorage para el dashboard
-    localStorage.setItem('userName', credentials.name);
-
-    // TODO: Implementar llamada al servicio de autenticación
-    // this.authService.login(credentials).subscribe(...)
-
-    // Redirigir al dashboard
-    this.router.navigate(['/dashboard']);
+    authObs.subscribe({
+      next: (res) => {
+        console.log('Auth exitoso:', res);
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        console.error('Error Auth:', err);
+        this.errorMessage = err.error?.message || 'Ocurrió un error. Intenta nuevamente.';
+      }
+    });
   }
 
   /**

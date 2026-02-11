@@ -1,4 +1,4 @@
-const Task = require('../models/Task');
+const Quest = require('../models/Quest');
 const Schedule = require('../models/Schedule');
 const StudySession = require('../models/StudySession');
 
@@ -17,13 +17,13 @@ const getDashboardData = async (req, res) => {
 
     // Ejecutar todas las consultas en paralelo para optimizar
     const [pendingTasks, todaySchedule, studyStats] = await Promise.all([
-      // Tareas pendientes ordenadas por prioridad y fecha
-      Task.find({
+      // Misiones pendientes (antes Tareas)
+      Quest.find({
         user: userId,
-        status: { $in: ['pending', 'in-progress'] }
+        status: 'pending'
       })
-        .sort({ priority: -1, dueDate: 1 })
-        .limit(10),
+        .sort({ createdAt: -1 })
+        .limit(5),
 
       // Horario de hoy
       Schedule.find({

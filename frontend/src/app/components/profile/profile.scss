@@ -1,0 +1,386 @@
+@use 'sass:map';
+@import '../../../assets/scss/abstracts/variables';
+
+.c-profile {
+    padding: 2rem;
+
+    &__header-mobile {
+        display: none; // Solo visible en móvil si es necesario
+        margin-bottom: 2rem;
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #2D3436;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 2rem;
+        align-items: start;
+        min-height: 80vh;
+    }
+}
+
+// === CAROUSEL CARD (Left Column) ===
+.c-character-card {
+    position: relative;
+    height: 600px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    background: #2D3436;
+
+    &__image-wrapper {
+        width: 100%;
+        height: 100%;
+    }
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    &:hover &__image {
+        transform: scale(1.05);
+    }
+
+    &__overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 2rem;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &__badge {
+        align-self: flex-start;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(4px);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    &__name {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 800;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #FF477E;
+        font-weight: 700;
+    }
+
+    &__class {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        opacity: 0.7;
+        background: #333;
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 8px;
+        align-self: flex-start;
+    }
+}
+
+// === STATS DASHBOARD (Right Column) ===
+.c-stats-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+// HEADER: Level & XP
+.c-stats-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.c-level-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(255, 154, 158, 0.4);
+
+    &__number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #2D3436;
+        line-height: 1;
+    }
+
+    &__label {
+        font-size: 0.6rem;
+        font-weight: 700;
+        color: #555;
+        margin-top: -2px;
+    }
+}
+
+.c-xp-container {
+    flex: 1;
+}
+
+.c-xp-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.c-xp-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2D3436;
+}
+
+.c-xp-values {
+    font-weight: 600;
+    color: #636E72;
+}
+
+.c-xp-next {
+    margin: 0.5rem 0 0;
+    font-size: 0.8rem;
+    color: #636E72;
+    font-style: italic;
+}
+
+// STATS GRID
+.c-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.c-stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 0.8rem;
+        color: #B2BEC3;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    &__value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #2D3436;
+        line-height: 1;
+    }
+
+    &__badge {
+        align-self: flex-start;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.2rem 0.5rem;
+        border-radius: 10px;
+
+        &--green {
+            background: #D4EDDA;
+            color: #155724;
+        }
+    }
+
+    &__streak {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &__icon {
+        font-size: 1.5rem;
+        color: #FF7675; // Color fuego
+    }
+}
+
+// ATTRIBUTES SSECTION
+.c-attributes {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.c-section-title {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.25rem;
+    color: #2D3436;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    i {
+        color: #6C5CE7;
+    }
+}
+
+.c-attribute-row {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.c-attribute-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #636E72;
+}
+
+// PROGRESS BARS
+.c-progress-bar {
+    height: 10px;
+    background: #E9ECEF;
+    border-radius: 5px;
+    overflow: hidden;
+
+    &__fill {
+        height: 100%;
+        border-radius: 5px;
+        background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+        transition: width 0.5s ease;
+
+        &--blue {
+            background: linear-gradient(90deg, #74B9FF 0%, #0984E3 100%);
+        }
+
+        &--green {
+            background: linear-gradient(90deg, #55EFC4 0%, #00B894 100%);
+        }
+
+        &--pink {
+            background: linear-gradient(90deg, #FDA7DF 0%, #e84393 100%);
+        }
+
+        &--orange {
+            background: linear-gradient(90deg, #FAB1A0 0%, #E17055 100%);
+        }
+    }
+
+    &--small {
+        height: 6px;
+        margin-top: 0.5rem;
+    }
+}
+
+// ACHIEVEMENTS
+.c-achievements {
+    background: white;
+    padding: 2rem;
+    border-radius: 24px;
+}
+
+.c-achievement-list {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.c-achievement-item {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #F0F3F4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #2D3436;
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: scale(1.1);
+        background: #FFD3E0;
+        color: #E84393;
+    }
+
+    &--add {
+        border: 2px dashed #B2BEC3;
+        background: transparent;
+        color: #B2BEC3;
+        cursor: pointer;
+        font-size: 1rem;
+
+        &:hover {
+            border-color: #6C5CE7;
+            color: #6C5CE7;
+            background: transparent;
+        }
+    }
+}
+
+// RESPONSIVE (< 900px)
+@media (max-width: 900px) {
+    .c-profile {
+        &__header-mobile {
+            display: block;
+        }
+
+        &__grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+        }
+    }
+
+    .c-character-card {
+        height: 500px;
+    }
+
+    .c-stats-grid {
+        grid-template-columns: 1fr; // Una columna en las stats pequeñas en móvil
+    }
+
+    .c-stats-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+}

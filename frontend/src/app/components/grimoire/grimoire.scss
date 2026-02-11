@@ -1,34 +1,429 @@
-.placeholder-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60vh;
+@use 'sass:map';
+@import '../../../assets/scss/abstracts/variables';
+
+/* ==========================================
+   GRIMOIRE COMPONENT - MAGICAL THEME
+   ========================================== */
+
+.c-grimoire {
+    padding: 2.5rem;
+    min-height: 70vh;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 2px solid transparent;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+        linear-gradient(135deg, map.get($theme-colors, 'primary') 0%, map.get($theme-colors, 'secondary') 100%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+
+    &__header {
+        margin-bottom: 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+
+        h2 {
+            font-size: 2.25rem;
+            font-weight: 900;
+            color: #1A1A2E;
+            margin: 0;
+            text-shadow:
+                0 0 20px rgba(map.get($theme-colors, 'secondary'), 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #1A1A2E 0%, map.get($theme-colors, 'secondary') 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    }
+
+    &__search {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        i {
+            position: absolute;
+            left: 1.25rem;
+            color: map.get($theme-colors, 'secondary');
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+    }
+
+    &__search-input {
+        padding: 0.9rem 1.5rem 0.9rem 3.25rem;
+        border: 2px solid rgba(map.get($theme-colors, 'primary'), 0.2);
+        border-radius: 50px;
+        font-size: 0.95rem;
+        min-width: 320px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        transition: all $transition-normal;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+        &:focus {
+            outline: none;
+            border-color: map.get($theme-colors, 'primary');
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 0 0 4px rgba(map.get($theme-colors, 'primary'), 0.1),
+                0 8px 16px rgba(map.get($theme-colors, 'primary'), 0.15);
+            transform: translateY(-1px);
+        }
+
+        &::placeholder {
+            color: rgba(map.get($theme-colors, 'secondary'), 0.5);
+            font-style: italic;
+            font-weight: 500;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    &__empty {
+        text-align: center;
+        padding: 5rem 2rem;
+
+        &-icon {
+            font-size: 5rem;
+            color: rgba(map.get($theme-colors, 'secondary'), 0.3);
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 4px 12px rgba(map.get($theme-colors, 'secondary'), 0.2));
+        }
+
+        &-text {
+            font-size: 1.2rem;
+            color: #636E72;
+            margin: 0;
+            font-weight: 500;
+        }
+    }
 }
 
-.placeholder-card {
-    background: #FFFFFF;
-    padding: 60px;
-    border-radius: 24px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+/* ==========================================
+   RESOURCE CARDS - MAGICAL STYLE
+   ========================================== */
+
+.c-resource-card {
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 1) 0%, rgba(240, 242, 255, 0.95) 100%);
+    border: 1px solid rgba(map.get($theme-colors, 'primary'), 0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    max-width: 400px;
+    transition: all $transition-normal;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
-    .placeholder-icon {
-        font-size: 64px;
-        color: #FF477E;
-        margin-bottom: 24px;
+    // Efecto de brillo mágico en el fondo
+    &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle,
+                rgba(map.get($theme-colors, 'primary'), 0.15) 0%,
+                transparent 70%);
+        opacity: 0;
+        transition: opacity $transition-normal, transform $transition-slow;
+        pointer-events: none;
     }
 
-    .placeholder-title {
-        font-size: 28px;
-        font-weight: 800;
+    // Destello mágico superior
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(map.get($theme-colors, 'primary'), 0.8) 50%,
+                transparent 100%);
+        opacity: 0;
+        transition: opacity $transition-normal;
+    }
+
+    &:hover {
+        transform: translateY(-8px) scale(1.02);
+        border-color: rgba(map.get($theme-colors, 'primary'), 0.6);
+        box-shadow:
+            0 15px 30px rgba(map.get($theme-colors, 'primary'), 0.25),
+            0 8px 16px rgba(map.get($theme-colors, 'secondary'), 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 1);
+
+        &::before {
+            opacity: 1;
+            transform: rotate(45deg);
+        }
+
+        &::after {
+            opacity: 1;
+        }
+
+        .c-resource-card__icon {
+            transform: scale(1.15) rotate(5deg);
+            filter: drop-shadow(0 8px 16px currentColor);
+        }
+    }
+
+    &__icon-wrapper {
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__icon {
+        font-size: 4rem;
+        transition: all $transition-normal;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+
+        &--pdf {
+            color: #E74C3C;
+        }
+
+        &--video {
+            color: #3498DB;
+        }
+
+        &--link {
+            color: #27AE60;
+        }
+    }
+
+    &__content {
+        flex: 1;
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__type {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all $transition-normal;
+    }
+
+    &__title {
+        font-size: 1.2rem;
+        font-weight: 700;
         color: #2D3436;
-        margin: 0 0 12px 0;
+        margin: 0 0 1rem 0;
+        line-height: 1.4;
     }
 
-    .placeholder-text {
-        font-size: 15px;
+    &__description {
+        font-size: 0.9rem;
         color: #636E72;
+        line-height: 1.6;
         margin: 0;
+    }
+
+    &__footer {
+        width: 100%;
+        position: relative;
+        z-index: 1;
+    }
+}
+
+/* ==========================================
+   TYPE-SPECIFIC CARD STYLES
+   ========================================== */
+
+.c-resource-card[data-type="PDF"] {
+    .c-resource-card__type {
+        background: linear-gradient(135deg, #FF6B6B 0%, #E74C3C 100%);
+        color: white;
+    }
+
+    &:hover {
+        box-shadow:
+            0 15px 30px rgba(231, 76, 60, 0.3),
+            0 8px 16px rgba(231, 76, 60, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 1);
+        border-color: rgba(231, 76, 60, 0.6);
+    }
+}
+
+.c-resource-card[data-type="Video"] {
+    .c-resource-card__type {
+        background: linear-gradient(135deg, #5DADE2 0%, #3498DB 100%);
+        color: white;
+    }
+
+    &:hover {
+        box-shadow:
+            0 15px 30px rgba(52, 152, 219, 0.3),
+            0 8px 16px rgba(52, 152, 219, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 1);
+        border-color: rgba(52, 152, 219, 0.6);
+    }
+}
+
+.c-resource-card[data-type="Link"] {
+    .c-resource-card__type {
+        background: linear-gradient(135deg, #58D68D 0%, #27AE60 100%);
+        color: white;
+    }
+
+    &:hover {
+        box-shadow:
+            0 15px 30px rgba(39, 174, 96, 0.3),
+            0 8px 16px rgba(39, 174, 96, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 1);
+        border-color: rgba(39, 174, 96, 0.6);
+    }
+}
+
+/* ==========================================
+   MAGICAL BUTTONS
+   ========================================== */
+
+.c-btn {
+    cursor: pointer;
+    padding: 0.85rem 1.75rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all $transition-normal;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    // Efecto de brillo animado
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 100%);
+        transition: left 0.5s ease;
+    }
+
+    &:hover::before {
+        left: 100%;
+    }
+
+    &--secondary {
+        background: linear-gradient(135deg, #667EEA 0%, map.get($theme-colors, 'secondary') 100%);
+        color: white;
+        background-size: 200% 200%;
+        animation: gradientShift 3s ease infinite;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 8px 20px rgba(map.get($theme-colors, 'secondary'), 0.4),
+                0 4px 12px rgba(102, 126, 234, 0.3);
+            filter: brightness(1.1);
+        }
+
+        &:active {
+            transform: translateY(-1px);
+        }
+    }
+}
+
+// Animación de gradiente
+@keyframes gradientShift {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: map.get($breakpoints, 'md')) {
+    .c-grimoire {
+        padding: 1.5rem;
+
+        &__header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+
+            h2 {
+                font-size: 1.75rem;
+            }
+        }
+
+        &__search-input {
+            width: 100%;
+            min-width: unset;
+        }
+
+        &__grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+    }
+
+    .c-resource-card {
+        padding: 1.75rem;
+
+        &__icon {
+            font-size: 3.5rem;
+        }
+    }
+}
+
+@media (max-width: map.get($breakpoints, 'sm')) {
+    .c-grimoire {
+        padding: 1rem;
+
+        &__header h2 {
+            font-size: 1.5rem;
+        }
+    }
+
+    .c-resource-card {
+        padding: 1.5rem;
     }
 }

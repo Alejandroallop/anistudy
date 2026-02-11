@@ -1,7 +1,135 @@
-<div class="placeholder-container">
-    <div class="placeholder-card">
-        <i class="pi pi-flag placeholder-icon"></i>
-        <h2 class="placeholder-title">Misiones</h2>
-        <p class="placeholder-text">Sistema de misiones próximamente...</p>
+<section class="c-missions glass-panel">
+  <header class="c-missions__header">
+    <h2>📋 Tablón de Misiones</h2>
+    <button class="c-btn c-btn--primary" (click)="openModal()">
+      <i class="pi pi-plus"></i> Nueva Misión
+    </button>
+  </header>
+
+  <!-- MODAL DE NUEVA MISIÓN -->
+  <div class="c-modal-overlay" *ngIf="showModal">
+    <div class="c-modal">
+      <header class="c-modal__header">
+        <h3 class="c-modal__title">📜 Nueva Misión</h3>
+        <button class="c-modal__close" (click)="closeModal()">
+          <i class="pi pi-times"></i>
+        </button>
+      </header>
+
+      <div class="c-modal__body">
+        <div class="c-form-group">
+          <label for="title" class="c-label">Título</label>
+          <input type="text" id="title" class="c-input" [(ngModel)]="newQuest.title"
+            placeholder="Ej: Derrotar al Boss Java">
+        </div>
+
+        <div class="c-form-group">
+          <label for="desc" class="c-label">Descripción</label>
+          <textarea id="desc" class="c-textarea" [(ngModel)]="newQuest.description"
+            placeholder="Detalles de la misión..."></textarea>
+        </div>
+
+        <div class="c-form-row">
+          <div class="c-form-group">
+            <label for="rank" class="c-label">Rango</label>
+            <select id="rank" class="c-select" [(ngModel)]="newQuest.rank">
+              <option value="S">S (Legendario)</option>
+              <option value="A">A (Épico)</option>
+              <option value="B">B (Difícil)</option>
+              <option value="C">C (Normal)</option>
+            </select>
+          </div>
+
+          <div class="c-form-group">
+            <label for="xp" class="c-label">Recompensa XP</label>
+            <input type="number" id="xp" class="c-input" [(ngModel)]="newQuest.xp">
+          </div>
+        </div>
+      </div>
+
+      <footer class="c-modal__footer">
+        <button class="c-btn c-btn--secondary" (click)="closeModal()">Cancelar</button>
+        <button class="c-btn c-btn--primary" (click)="saveQuest()">
+          <i class="pi pi-check"></i> Aceptar Misión
+        </button>
+      </footer>
     </div>
-</div>
+  </div>
+
+  <div class="c-missions__board">
+    <!-- Columna PENDIENTES -->
+    <article class="c-column c-column--todo">
+      <div class="c-column__header">
+        <h3 class="c-column__title">⏳ Pendientes</h3>
+        <span class="c-column__count">{{ todoQuests.length }}</span>
+      </div>
+      <div class="c-column__cards">
+        <div class="c-card" *ngFor="let quest of todoQuests" (click)="advanceQuest(quest)">
+          <div class="c-card__header">
+            <span class="c-card__tag">Rango {{ quest.rank }}</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <span class="c-card__xp">+{{ quest.xp }} XP</span>
+              <button class="c-btn-icon" (click)="deleteQuest(quest._id!, $event)" title="Borrar">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </div>
+          <h4 class="c-card__title">{{ quest.title }}</h4>
+          <div class="c-card__action">
+            <span class="c-card__hint">Click para empezar ▶</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Columna EN PROCESO -->
+    <article class="c-column c-column--doing">
+      <div class="c-column__header">
+        <h3 class="c-column__title">⚔️ En Curso</h3>
+        <span class="c-column__count">{{ inProgressQuests.length }}</span>
+      </div>
+      <div class="c-column__cards">
+        <div class="c-card c-card--active" *ngFor="let quest of inProgressQuests" (click)="advanceQuest(quest)">
+          <div class="c-card__header">
+            <span class="c-card__tag c-card__tag--active">Rango {{ quest.rank }}</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <span class="c-card__xp c-card__xp--active">+{{ quest.xp }} XP</span>
+              <button class="c-btn-icon" (click)="deleteQuest(quest._id!, $event)" title="Borrar">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </div>
+          <h4 class="c-card__title">{{ quest.title }}</h4>
+          <div class="c-card__action">
+            <span class="c-card__hint">Click para completar ✓</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Columna COMPLETADAS -->
+    <article class="c-column c-column--done">
+      <div class="c-column__header">
+        <h3 class="c-column__title">✅ Completadas</h3>
+        <span class="c-column__count">{{ completedQuests.length }}</span>
+      </div>
+      <div class="c-column__cards">
+        <div class="c-card c-card--done" *ngFor="let quest of completedQuests">
+          <div class="c-card__header">
+            <span class="c-card__tag c-card__tag--done">Rango {{ quest.rank }}</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <span class="c-card__xp c-card__xp--done">+{{ quest.xp }} XP</span>
+              <button class="c-btn-icon" (click)="deleteQuest(quest._id!, $event)" title="Borrar">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </div>
+          <h4 class="c-card__title c-card__title--done">{{ quest.title }}</h4>
+          <div class="c-card__action">
+            <span class="c-card__hint c-card__hint--done">¡Completado! 🎉</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

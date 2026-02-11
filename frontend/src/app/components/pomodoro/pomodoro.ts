@@ -60,7 +60,7 @@ export class Pomodoro implements OnDestroy {
   /**
    * Toggle para reproducir/pausar música
    */
-  toggleMusic() {
+  toggleAudio() {
     if (!this.audio) return;
 
     try {
@@ -72,9 +72,7 @@ export class Pomodoro implements OnDestroy {
             this.cdr.detectChanges();
           })
           .catch(error => {
-            console.error('Error al reproducir audio:', error);
-            // El navegador puede bloquear autoplay
-            alert('Por favor, interactúa con la página primero para reproducir música.');
+            console.warn('Fallo de audio silencioso:', error);
           });
       } else {
         // Pausar música
@@ -92,6 +90,11 @@ export class Pomodoro implements OnDestroy {
    */
   startTimer() {
     if (this.isRunning) return;
+
+    // Auto-start music if not playing
+    if (!this.isMusicPlaying && this.audio) {
+      this.toggleAudio();
+    }
 
     this.isRunning = true;
     this.intervalId = setInterval(() => {

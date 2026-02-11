@@ -11,7 +11,7 @@ app.use(helmet());
 
 // CORS
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
+  origin: 'http://localhost:4200', // Angular Frontend
   credentials: true
 }));
 
@@ -31,9 +31,11 @@ app.use(express.urlencoded({ extended: true }));
 // ====================================
 const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const questRoutes = require('./routes/questRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/quests', questRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {

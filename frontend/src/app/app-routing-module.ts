@@ -11,6 +11,8 @@ import { Pomodoro } from './components/pomodoro/pomodoro';
 import { Profile } from './components/profile/profile';
 import { Settings } from './components/settings/settings';
 
+import { AuthGuard } from './guards/auth.guard';
+
 const routes: Routes = [
   {
     path: '',
@@ -24,6 +26,7 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: Dashboard,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',

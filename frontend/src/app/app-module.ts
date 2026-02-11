@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { HttpClientModule } from '@angular/common/http';
 
 // PrimeNG Modules
 import { InputTextModule } from 'primeng/inputtext';
@@ -46,7 +47,8 @@ import { Profile } from './components/profile/profile';
     // PrimeNG Modules
     InputTextModule,
     PasswordModule,
-    ButtonModule
+    ButtonModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [App]

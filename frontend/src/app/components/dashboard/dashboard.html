@@ -2,12 +2,12 @@
     <!-- SIDEBAR -->
     <aside class="l-dashboard__sidebar">
         <!-- USER PROFILE -->
-        <section class="c-user-profile">
+        <section class="c-user-profile" routerLink="profile">
             <div class="c-user-profile__avatar">
-                <img src="/assets/images/avatar.png" alt="Usuario" class="c-user-profile__img" />
+                <img [src]="userAvatar" alt="Usuario" class="c-user-profile__img" />
             </div>
             <h2 class="c-user-profile__name">{{ userName }}</h2>
-            <span class="c-user-profile__level">NIVEL 5</span>
+            <span class="c-user-profile__level">NIVEL {{ userLevel }}</span>
         </section>
 
         <!-- NAVIGATION -->
