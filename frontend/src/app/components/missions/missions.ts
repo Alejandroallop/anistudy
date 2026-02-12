@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { Quest, QuestService } from '../../services/quest.service';
 
@@ -24,9 +24,10 @@ export class Missions implements OnInit {
     status: 'pending'
   };
 
-  constructor(private questService: QuestService) {}
+  constructor(private questService: QuestService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
+    console.log('🔄 Iniciando MissionsComponent, cargando datos...');
     this.loadQuests();
   }
 
@@ -35,6 +36,7 @@ export class Missions implements OnInit {
       next: (data) => {
         this.quests = data;
         console.log('Misiones cargadas:', this.quests);
+        this.cdr.markForCheck(); // Forzar detección de cambios
       },
       error: (err) => console.error('Error al cargar misiones:', err)
     });

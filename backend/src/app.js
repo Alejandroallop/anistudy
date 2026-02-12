@@ -36,6 +36,7 @@ const questRoutes = require('./routes/questRoutes');
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/quests', questRoutes);
+app.use('/api/users', require('./routes/userRoutes'));
 
 // Ruta de prueba
 app.get('/', (req, res) => {

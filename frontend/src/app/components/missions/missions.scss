@@ -286,20 +286,32 @@
 }
 
 .c-btn-icon {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: #b2bec3;
-  padding: 4px;
+  /* CAPA SUPERIOR & INTERACCIÓN */
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+
+  /* VISIBILIDAD FORZADA */
+  min-width: 32px;
+  min-height: 32px;
+  background-color: rgba(255, 0, 0, 0.1);
+  /* Rojo suave */
+  border: 1px solid red;
+  color: red;
+  /* Icono rojo oscuro */
   border-radius: 4px;
-  transition: all 0.2s;
+
+  /* ALINEACIÓN */
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(214, 48, 49, 0.1);
-    color: #d63031;
+    background-color: red;
+    color: white;
+    transform: scale(1.1);
   }
 }
 
