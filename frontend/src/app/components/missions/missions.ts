@@ -75,6 +75,8 @@ export class Missions implements OnInit {
         if (index !== -1) {
           this.quests[index] = updatedQuest;
         }
+        // Fix "Doble Click": Forzar repintado inmediato
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al actualizar misión:', err)
     });
@@ -86,7 +88,7 @@ export class Missions implements OnInit {
       title: '',
       description: '',
       rank: 'C',
-      xp: 10,
+      xp: 50, // Default C
       status: 'pending'
     };
   }
@@ -95,8 +97,25 @@ export class Missions implements OnInit {
     this.showModal = false;
   }
 
+  updateXpByRank(): void {
+      switch (this.newQuest.rank) {
+          case 'S': this.newQuest.xp = 500; break;
+          case 'A': this.newQuest.xp = 250; break;
+          case 'B': this.newQuest.xp = 100; break;
+          case 'C': this.newQuest.xp = 50; break;
+          default: this.newQuest.xp = 50;
+      }
+  }
+
   saveQuest(): void {
-    if (!this.newQuest.title || !this.newQuest.description) return;
+    console.log('Botón guardar clickeado', this.newQuest);
+    if (!this.newQuest.title || !this.newQuest.description) {
+        console.warn('Faltan campos requeridos');
+        return;
+    }
+
+    // Asegurar XP correcta por si acaso
+    this.updateXpByRank();
 
     this.questService.createQuest(this.newQuest as Quest).subscribe({
       next: (createdQuest) => {
@@ -117,17 +136,12 @@ export class Missions implements OnInit {
           console.log('Misión eliminada:', id);
           // Opción 1: Recargar todo (más seguro)
           this.loadQuests(); 
-          
-          // Opción 2 (Optimista): Filtrar localmente
-          // this.quests = this.quests.filter(q => q._id !== id);
         },
         error: (err) => console.error('Error al eliminar misión:', err)
       });
     }
   }
 
-  // Método legacy para mantener compatibilidad si algo llama a addMission,
-  // pero la UI ahora llamará a openModal()
   addMission(): void {
     this.openModal();
   }

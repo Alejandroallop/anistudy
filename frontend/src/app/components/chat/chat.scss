@@ -1,5 +1,5 @@
 @use 'sass:map';
-@import '../../../assets/scss/abstracts/variables';
+@use '../../../assets/scss/abstracts/variables' as *;
 
 /* ==========================================
    CHAT COMPONENT - VISUAL NOVEL STYLE

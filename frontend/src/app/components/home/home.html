@@ -30,13 +30,14 @@
             <div class="stat-icon star">
                 <i class="pi pi-star"></i>
             </div>
-            <span class="stat-label">Experiencia (Nvl {{ stats?.level || 1 }})</span>
+            <span class="stat-label">Experiencia (Nvl {{ userLevel }})</span>
         </div>
-        <p class="stat-value">{{ stats?.currentXP || 0 }} XP Total</p>
+        <p class="stat-value">{{ userXp }} / {{ nextLevelXp }} XP</p>
         <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="xpProgress"></div>
+            <!-- Barra dinámica: Cálculo porcentual relativo -->
+            <div class="progress-fill" [style.width.%]="(userXp / nextLevelXp) * 100"></div>
         </div>
-        <p class="stat-caption">{{ xpToNext }} XP para subir de nivel</p>
+        <p class="stat-caption">{{ nextLevelXp - userXp }} XP para subir de nivel</p>
     </div>
 
     <!-- Card 3: Enfoque -->
@@ -76,8 +77,8 @@
                 <i class="pi pi-flag"></i>
                 Misiones
             </h3>
-            <span class="task-count" *ngIf="stats">
-                {{ stats?.completedQuests }} / {{ stats?.totalQuests }}
+            <span class="task-count">
+                {{ missionsCompleted }} / {{ stats?.totalQuests || 0 }}
             </span>
         </div>
 

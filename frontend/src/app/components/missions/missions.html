@@ -32,21 +32,23 @@
         <div class="c-form-row">
           <div class="c-form-group">
             <label for="rank" class="c-label">Rango</label>
-            <select id="rank" class="c-select" [(ngModel)]="newQuest.rank">
-              <option value="S">S (Legendario)</option>
-              <option value="A">A (Épico)</option>
-              <option value="B">B (Difícil)</option>
-              <option value="C">C (Normal)</option>
+            <select id="rank" class="c-select" [(ngModel)]="newQuest.rank" (change)="updateXpByRank()">
+              <option value="S">S (Legendario - 500 XP)</option>
+              <option value="A">A (Épico - 250 XP)</option>
+              <option value="B">B (Difícil - 100 XP)</option>
+              <option value="C">C (Normal - 50 XP)</option>
             </select>
           </div>
 
+          <!-- XP Automática (Readonly o Hidden) -->
           <div class="c-form-group">
-            <label for="xp" class="c-label">Recompensa XP</label>
-            <input type="number" id="xp" class="c-input" [(ngModel)]="newQuest.xp">
+            <label for="xp" class="c-label">Recompensa XP (Auto)</label>
+            <input type="number" id="xp" class="c-input" [(ngModel)]="newQuest.xp" readonly>
           </div>
         </div>
       </div>
 
+      <!-- Footer ÚNICO y LIMPIO -->
       <footer class="c-modal__footer">
         <button class="c-btn c-btn--secondary" (click)="closeModal()">Cancelar</button>
         <button class="c-btn c-btn--primary" (click)="saveQuest()">
