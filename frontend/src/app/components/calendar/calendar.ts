@@ -1,9 +1,10 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
-import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
+import { CalendarOptions, EventClickArg, EventInput } from '@fullcalendar/core';
 import { DateClickArg } from '@fullcalendar/interaction';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { EventService, CalendarEvent } from '../../services/event.service';
 
 @Component({
   selector: 'app-calendar',
@@ -26,8 +27,11 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
   newDate: string = '';
   newType: 'exam' | 'delivery' | 'class' = 'exam';
 
-  // Inyectar ChangeDetectorRef
-  constructor(private cd: ChangeDetectorRef) { }
+  // Inyectar ChangeDetectorRef y EventService
+  constructor(
+    private cd: ChangeDetectorRef,
+    private eventService: EventService
+  ) { }
 
   ngOnInit() {
     // Configurar calendarOptions en ngOnInit
@@ -49,8 +53,8 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
       height: 'auto',
       fixedWeekCount: false,
 
-      // Eventos mock definidos aquí
-      events: this.getInitialEvents(),
+      // Eventos se cargarán dinámicamente desde la BD
+      events: [],
 
       // Handlers
       dateClick: this.handleDateClick.bind(this),
@@ -60,6 +64,9 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
       eventDisplay: 'block',
       displayEventTime: false
     };
+
+    // Cargar eventos desde la base de datos
+    this.loadEvents();
 
     // 🔥 FORZAR DETECCIÓN DE CAMBIOS - Elimina el error NG0100
     this.cd.detectChanges();
@@ -93,72 +100,57 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Datos mock de eventos iniciales
+   * Carga eventos desde la base de datos
    */
-  private getInitialEvents() {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+  loadEvents(): void {
+    this.eventService.getEvents().subscribe({
+      next: (events) => {
+        console.log('📅 Eventos cargados desde la BD:', events);
+        
+        // Mapear eventos de BD al formato de FullCalendar
+        const mappedEvents: EventInput[] = events.map(event => {
+          let backgroundColor = '#FF477E';
+          let emoji = '📚';
 
-    const inThreeDays = new Date(today);
-    inThreeDays.setDate(inThreeDays.getDate() + 3);
+          // Asignar color y emoji según el tipo
+          switch (event.type) {
+            case 'exam':
+              backgroundColor = '#FF477E'; // Rosa
+              emoji = '📚';
+              break;
+            case 'delivery':
+              backgroundColor = '#4A90E2'; // Azul
+              emoji = '💻';
+              break;
+            case 'class':
+              backgroundColor = '#10B981'; // Verde
+              emoji = '🇯🇵';
+              break;
+          }
 
-    const thisWeekend = new Date(today);
-    thisWeekend.setDate(thisWeekend.getDate() + (6 - thisWeekend.getDay()));
+          return {
+            id: event._id,
+            title: `${emoji} ${event.title}`,
+            start: typeof event.start === 'string' ? event.start : event.start.toISOString().split('T')[0],
+            backgroundColor: backgroundColor,
+            borderColor: backgroundColor,
+            textColor: '#FFFFFF',
+            extendedProps: {
+              _id: event._id,
+              type: event.type
+            }
+          };
+        });
 
-    const nextWeek = new Date(today);
-    nextWeek.setDate(nextWeek.getDate() + 7);
-
-    const nextWeek2 = new Date(today);
-    nextWeek2.setDate(nextWeek2.getDate() + 10);
-
-    return [
-      {
-        id: '1',
-        title: '📚 Examen de Matemáticas',
-        start: tomorrow.toISOString().split('T')[0],
-        backgroundColor: '#FF477E',
-        borderColor: '#FF477E',
-        textColor: '#FFFFFF',
-        classNames: ['event-exam']
+        // Actualizar eventos en el calendario
+        this.calendarOptions.events = mappedEvents;
+        this.cd.detectChanges();
+        console.log('✅ Calendario actualizado con eventos de la BD');
       },
-      {
-        id: '2',
-        title: '💻 Entrega Proyecto Java',
-        start: inThreeDays.toISOString().split('T')[0],
-        backgroundColor: '#4A90E2',
-        borderColor: '#4A90E2',
-        textColor: '#FFFFFF',
-        classNames: ['event-delivery']
-      },
-      {
-        id: '3',
-        title: '🇯🇵 Clase de Japonés',
-        start: thisWeekend.toISOString().split('T')[0],
-        backgroundColor: '#10B981',
-        borderColor: '#10B981',
-        textColor: '#FFFFFF',
-        classNames: ['event-class']
-      },
-      {
-        id: '4',
-        title: '📝 Entrega Ensayo Historia',
-        start: nextWeek.toISOString().split('T')[0],
-        backgroundColor: '#8B5CF6',
-        borderColor: '#8B5CF6',
-        textColor: '#FFFFFF',
-        classNames: ['event-delivery']
-      },
-      {
-        id: '5',
-        title: '🔬 Examen de Biología',
-        start: nextWeek2.toISOString().split('T')[0],
-        backgroundColor: '#FF477E',
-        borderColor: '#FF477E',
-        textColor: '#FFFFFF',
-        classNames: ['event-exam']
+      error: (error) => {
+        console.error('❌ Error cargando eventos:', error);
       }
-    ];
+    });
   }
 
   /**
@@ -209,42 +201,29 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    // Determinar color según tipo
-    let backgroundColor = '#FF477E'; // Default: Examen (Rosa)
-    let emoji = '📚';
-
-    switch (this.newType) {
-      case 'exam':
-        backgroundColor = '#FF477E'; // Rosa
-        emoji = '📚';
-        break;
-      case 'delivery':
-        backgroundColor = '#4A90E2'; // Azul
-        emoji = '💻';
-        break;
-      case 'class':
-        backgroundColor = '#10B981'; // Verde
-        emoji = '🇯🇵';
-        break;
-    }
-
-    console.log('🎨 Color seleccionado:', backgroundColor, 'Emoji:', emoji);
-
-    // Crear evento usando la API de FullCalendar (evita ExpressionChangedError)
-    const calendarApi = this.calendarComponent.getApi();
-    calendarApi.addEvent({
-      title: `${emoji} ${this.newTitle}`,
-      start: this.newDate,
-      backgroundColor: backgroundColor,
-      borderColor: backgroundColor,
-      textColor: '#FFFFFF',
+    // Crear evento en la base de datos
+    const newEvent: CalendarEvent = {
+      title: this.newTitle,
+      type: this.newType,
+      start: this.newDate, // El backend requiere este nombre
       allDay: true
+    };
+
+    this.eventService.createEvent(newEvent).subscribe({
+      next: (createdEvent) => {
+        console.log('✅ Evento creado en BD:', createdEvent);
+        
+        // Recargar todos los eventos desde el servidor
+        this.loadEvents();
+        
+        // Cerrar modal y limpiar
+        this.closeModal();
+      },
+      error: (error) => {
+        console.error('❌ Error creando evento:', error);
+        alert('Error al crear el evento. Por favor, intenta de nuevo.');
+      }
     });
-
-    console.log('✅ Evento añadido al calendario');
-
-    // Cerrar modal y limpiar
-    this.closeModal();
   }
 
   /**
@@ -265,8 +244,28 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
     const confirmDelete = confirm(`${arg.event.title}\nFecha: ${arg.event.startStr}\n\n¿Eliminar este evento?`);
 
     if (confirmDelete) {
-      arg.event.remove();
-      console.log('🗑️ Evento eliminado');
+      // Obtener el _id del evento
+      const eventId = arg.event.extendedProps['_id'] || arg.event.id;
+      
+      if (!eventId) {
+        console.error('❌ Error: evento sin ID');
+        alert('Error: no se puede eliminar el evento');
+        return;
+      }
+
+      // Eliminar del backend
+      this.eventService.deleteEvent(eventId).subscribe({
+        next: () => {
+          console.log('✅ Evento eliminado de BD');
+          // Eliminar de la vista de FullCalendar
+          arg.event.remove();
+          console.log('🗑️ Evento eliminado de la vista');
+        },
+        error: (error) => {
+          console.error('❌ Error eliminando evento:', error);
+          alert('Error al eliminar el evento');
+        }
+      });
     }
   }
 

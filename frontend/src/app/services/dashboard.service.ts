@@ -19,7 +19,8 @@ export interface UserStats {
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = 'http://localhost:3000/api/users/stats';
+  private apiUrl = 'http://localhost:3000/api/users';
+  private statsUrl = `${this.apiUrl}/stats`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -31,6 +32,11 @@ export class DashboardService {
   }
 
   getStats(): Observable<UserStats> {
-    return this.http.get<UserStats>(this.apiUrl, { headers: this.getHeaders() });
+    return this.http.get<UserStats>(this.statsUrl, { headers: this.getHeaders() });
+  }
+
+  addFocusTime(minutes: number): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.post(`${this.apiUrl}/focus-time`, { minutes }, { headers });
   }
 }

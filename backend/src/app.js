@@ -32,11 +32,17 @@ app.use(express.urlencoded({ extended: true }));
 const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const questRoutes = require('./routes/questRoutes');
+const resourceRoutes = require('./routes/resourceRoutes');
+const eventRoutes = require('./routes/eventRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/quests', questRoutes);
+app.use('/api/resources', resourceRoutes);
+app.use('/api/events', eventRoutes);
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/chat', chatRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {

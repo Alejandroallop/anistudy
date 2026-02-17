@@ -1,8 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { getStats } = require('../controllers/statsController');
+const { getStats, addFocusTime } = require('../controllers/statsController');
 const { protect } = require('../middlewares/authMiddleware');
 
-router.get('/stats', protect, getStats);
+// Todas las rutas requieren autenticación
+router.use(protect);
+
+// GET /api/users/stats - Obtener estadísticas del usuario
+router.get('/stats', getStats);
+
+// POST /api/users/focus-time - Registrar tiempo de Pomodoro completado
+router.post('/focus-time', addFocusTime);
 
 module.exports = router;

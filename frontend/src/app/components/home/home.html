@@ -20,7 +20,7 @@
             </div>
             <span class="stat-label">Racha</span>
         </div>
-        <p class="stat-value">12 Días</p>
+        <p class="stat-value">{{ userStreak }} Días</p>
         <p class="stat-caption">¡Sigue así! 🔥</p>
     </div>
 
@@ -48,8 +48,8 @@
             </div>
             <span class="stat-label">Enfoque</span>
         </div>
-        <p class="stat-value">4h 20m</p>
-        <p class="stat-caption">Tiempo hoy</p>
+        <p class="stat-value">{{ focusTimeFormatted }}</p>
+        <p class="stat-caption">Tiempo total</p>
     </div>
 
     <!-- Card 4: Modo Zen (Rosa) -->
@@ -57,7 +57,7 @@
         <div class="zen-content">
             <h3 class="zen-title">Modo Zen</h3>
             <p class="zen-subtitle">Activa tu mejor enfoque</p>
-            <button class="zen-play-btn">
+            <button class="zen-play-btn" routerLink="../pomodoro">
                 <i class="pi pi-play"></i>
                 <span>Iniciar</span>
             </button>
@@ -83,46 +83,34 @@
         </div>
 
         <div class="missions-list">
-            <!-- Misión 1 -->
-            <div class="mission-item">
+            <!-- Misiones activas desde BD -->
+            <div class="mission-item" *ngFor="let quest of activeQuests">
                 <div class="mission-info">
-                    <div class="mission-icon math">
-                        <i class="pi pi-calculator"></i>
+                    <div class="mission-icon" [ngClass]="{
+                        'math': quest.rank === 'S',
+                        'history': quest.rank === 'A',
+                        'science': quest.rank === 'B'
+                    }">
+                        <i class="pi pi-flag"></i>
                     </div>
                     <div class="mission-details">
-                        <h4 class="mission-name">Matemáticas</h4>
-                        <p class="mission-desc">Completar ejercicios 1-10</p>
+                        <h4 class="mission-name">{{ quest.title }}</h4>
+                        <p class="mission-desc">{{ quest.description }}</p>
                     </div>
                 </div>
                 <div class="mission-progress">
-                    <span class="progress-text">7/10</span>
-                    <div class="progress-bar small">
-                        <div class="progress-fill" style="width: 70%"></div>
-                    </div>
+                    <span class="xp-badge">{{ quest.xp }} XP</span>
                 </div>
             </div>
 
-            <!-- Misión 2 -->
-            <div class="mission-item">
-                <div class="mission-info">
-                    <div class="mission-icon history">
-                        <i class="pi pi-book"></i>
-                    </div>
-                    <div class="mission-details">
-                        <h4 class="mission-name">Historia</h4>
-                        <p class="mission-desc">Leer capítulo 5</p>
-                    </div>
-                </div>
-                <div class="mission-progress">
-                    <span class="progress-text">3/5</span>
-                    <div class="progress-bar small">
-                        <div class="progress-fill" style="width: 60%"></div>
-                    </div>
-                </div>
-            </div>
+            <!-- Mensaje si no hay misiones activas -->
+            <p class="no-missions" *ngIf="activeQuests.length === 0">
+                <i class="pi pi-check-circle"></i>
+                ¡Todo completado! Añade nuevas misiones.
+            </p>
         </div>
 
-        <button class="view-all-btn">Ver todas las misiones →</button>
+        <button class="view-all-btn" routerLink="../missions">Ver todas las misiones →</button>
     </div>
 
     <!-- Panel Derecha: Próximo Evento -->
@@ -134,27 +122,39 @@
             </h3>
         </div>
 
-        <div class="event-card">
-            <div class="event-date">
-                <span class="date-day">15</span>
-                <span class="date-month">MAR</span>
-            </div>
-            <div class="event-info">
-                <h4 class="event-title">Examen de Biología</h4>
-                <p class="event-time">
-                    <i class="pi pi-clock"></i>
-                    10:00 AM - Sala 203
-                </p>
-                <div class="event-tags">
-                    <span class="event-tag">Importante</span>
-                    <span class="event-tag">Ciencias</span>
+        <!-- Mostrar evento si existe -->
+        <div *ngIf="nextEvent">
+            <div class="event-card">
+                <div class="event-date">
+                    <span class="date-day">{{ nextEvent.start | date:'dd' }}</span>
+                    <span class="date-month">{{ nextEvent.start | date:'MMM' | uppercase }}</span>
                 </div>
+                <div class="event-info">
+                    <h4 class="event-title">{{ nextEvent.title }}</h4>
+                    <p class="event-time">
+                        <i class="pi pi-clock"></i>
+                        {{ nextEvent.type }}
+                    </p>
+                    <div class="event-tags">
+                        <span class="event-tag" [ngClass]="{
+                            'tag-exam': nextEvent.type === 'exam',
+                            'tag-delivery': nextEvent.type === 'delivery',
+                            'tag-class': nextEvent.type === 'class'
+                        }">{{ nextEvent.type }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="countdown">
+                <i class="pi pi-hourglass"></i>
+                <span>Faltan {{ daysToEvent }} días</span>
             </div>
         </div>
 
-        <div class="countdown">
-            <i class="pi pi-hourglass"></i>
-            <span>Faltan 3 días</span>
-        </div>
+        <!-- Mensaje si no hay eventos -->
+        <p class="no-events" *ngIf="!nextEvent">
+            <i class="pi pi-calendar-plus"></i>
+            No hay eventos próximos.
+        </p>
     </div>
 </section>

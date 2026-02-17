@@ -12,13 +12,9 @@ const eventSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, 'El título no puede tener más de 100 caracteres']
   },
-  start: {
+  date: {
     type: Date,
-    required: [true, 'Por favor especifica una fecha de inicio para el evento']
-  },
-  end: {
-    type: Date,
-    required: false // Opcional - la mayoría de eventos son de un solo día
+    required: [true, 'Por favor especifica una fecha para el evento']
   },
   type: {
     type: String,
@@ -27,10 +23,6 @@ const eventSchema = new mongoose.Schema({
       values: ['exam', 'delivery', 'class'],
       message: 'El tipo debe ser exam, delivery o class'
     }
-  },
-  allDay: {
-    type: Boolean,
-    default: true
   },
   createdAt: {
     type: Date,

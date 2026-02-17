@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import confetti from 'canvas-confetti';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-pomodoro',
@@ -28,8 +29,11 @@ export class Pomodoro implements OnDestroy {
   // Sonido de victoria
   private finishSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
 
-  // Inyectar ChangeDetectorRef para forzar la detección de cambios
-  constructor(private cdr: ChangeDetectorRef) {
+  // Inyectar ChangeDetectorRef y DashboardService
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private dashboardService: DashboardService
+  ) {
     this.initAudio();
     this.finishSound.volume = 0.6; // Volumen del sonido de victoria
   }
@@ -173,6 +177,18 @@ export class Pomodoro implements OnDestroy {
 
     // 🎊 LANZAR CONFETTI EXPLOSIVO
     this.launchConfetti();
+
+    // 📊 REGISTRAR TIEMPO DE ENFOQUE EN EL BACKEND
+    if (this.currentMode === 'focus') {
+      this.dashboardService.addFocusTime(this.FOCUS_TIME).subscribe({
+        next: (response) => {
+          console.log(`✅ ¡Tiempo registrado! ${response.minutesAdded} minutos. Total: ${response.totalFocusTime} min`);
+        },
+        error: (error) => {
+          console.error('❌ Error registrando tiempo de enfoque:', error);
+        }
+      });
+    }
 
     // Cambiar automáticamente al siguiente modo
     if (this.currentMode === 'focus') {

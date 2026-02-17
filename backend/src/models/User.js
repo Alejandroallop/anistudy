@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  focusTime: {
+    type: Number,
+    default: 0 // Total de minutos de estudio Pomodoro completados
+  },
   avatar: {
     type: String,
     default: 'assets/images/default-avatar.png'

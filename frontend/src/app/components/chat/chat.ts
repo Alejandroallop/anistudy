@@ -1,4 +1,5 @@
-import { Component, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { ChatService } from '../../services/chat.service';
 
 interface Message {
   id: number;
@@ -22,39 +23,19 @@ export class Chat implements AfterViewChecked {
   messages: Message[] = [
     {
       id: 1,
-      content: '¡Hola! 👋 Veo que tienes un examen de historia pronto. ¿Quieres repasar los conceptos clave de la Revolución Francesa hoy?',
+      content: '¡Hola! 👋 Soy tu Sensei IA. Estoy aquí para ayudarte con tus estudios, organización y motivación. ¿En qué puedo asistirte hoy?',
       sender: 'ai',
-      timestamp: new Date(Date.now() - 3600000),
+      timestamp: new Date(),
       type: 'text'
-    },
-    {
-      id: 2,
-      content: 'Sí, por favor, Sensei. Tengo dudas sobre las causas principales. 😓',
-      sender: 'user',
-      timestamp: new Date(Date.now() - 3000000),
-      type: 'text'
-    },
-    {
-      id: 3,
-      content: `¡Entendido! Vamos a desglosarlo como si fuera una misión RPG. 🛡️
-
-Las causas se dividen en tres grandes grupos:
-
-• **Económicas:** Malas cosechas y gastos excesivos de la corte.
-
-• **Sociales:** Desigualdad entre los tres estados.
-
-• **Ideológicas:** La influencia de la Ilustración.
-
-¿Cuál de estas te gustaría explorar primero?`,
-      sender: 'ai',
-      timestamp: new Date(Date.now() - 2400000),
-      type: 'options',
-      options: ['💰 Causas Económicas', '⚖️ Desigualdad Social']
     }
   ];
 
   private shouldScroll = false;
+
+  constructor(
+    private chatService: ChatService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngAfterViewChecked() {
     if (this.shouldScroll) {
@@ -78,48 +59,43 @@ Las causas se dividen en tres grandes grupos:
     };
 
     this.messages.push(userMessage);
+    const messageToSend = this.newMessage;
     this.newMessage = '';
     this.shouldScroll = true;
 
-    // Simular respuesta de la IA después de 2 segundos
-    setTimeout(() => {
-      const aiResponse: Message = {
-        id: this.messages.length + 1,
-        content: '¡Interesante pregunta! Déjame buscar en mi base de datos mágica... 📚✨ Te responderé con más detalles en un momento.',
-        sender: 'ai',
-        timestamp: new Date(),
-        type: 'text'
-      };
-      this.messages.push(aiResponse);
-      this.shouldScroll = true;
-    }, 2000);
+    // Llamar al servicio de Gemini AI
+    this.chatService.sendMessage(messageToSend).subscribe({
+      next: (response) => {
+        const aiResponse: Message = {
+          id: this.messages.length + 1,
+          content: response.reply,
+          sender: 'ai',
+          timestamp: new Date(),
+          type: 'text'
+        };
+        this.messages.push(aiResponse);
+        this.shouldScroll = true;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error al comunicarse con Sensei IA:', error);
+        const errorMessage: Message = {
+          id: this.messages.length + 1,
+          content: '¡Ups! 😅 Estoy teniendo problemas técnicos. Intenta de nuevo en un momento.',
+          sender: 'ai',
+          timestamp: new Date(),
+          type: 'text'
+        };
+        this.messages.push(errorMessage);
+        this.shouldScroll = true;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   selectOption(option: string): void {
-    // Simular clic en una opción
-    const userMessage: Message = {
-      id: this.messages.length + 1,
-      content: option,
-      sender: 'user',
-      timestamp: new Date(),
-      type: 'text'
-    };
-
-    this.messages.push(userMessage);
-    this.shouldScroll = true;
-
-    // Respuesta automática de la IA
-    setTimeout(() => {
-      const aiResponse: Message = {
-        id: this.messages.length + 1,
-        content: `¡Excelente elección! Vamos a profundizar en: ${option}. Te prepararé un resumen detallado...`,
-        sender: 'ai',
-        timestamp: new Date(),
-        type: 'text'
-      };
-      this.messages.push(aiResponse);
-      this.shouldScroll = true;
-    }, 1500);
+    this.newMessage = option;
+    this.sendMessage();
   }
 
   private scrollToBottom(): void {

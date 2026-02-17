@@ -1,10 +1,16 @@
 <section class="c-grimoire glass-panel">
     <header class="c-grimoire__header">
         <h2>📚 Grimorio de Conocimientos</h2>
-        <div class="c-grimoire__search">
-            <i class="pi pi-search"></i>
-            <input type="text" class="c-grimoire__search-input" placeholder="Buscar hechizo..."
-                [(ngModel)]="searchTerm">
+        <div class="c-grimoire__actions">
+            <div class="c-grimoire__search">
+                <i class="pi pi-search"></i>
+                <input type="text" class="c-grimoire__search-input" placeholder="Buscar hechizo..."
+                    [(ngModel)]="searchTerm">
+            </div>
+            <button class="c-btn c-btn--primary" (click)="openModal()" title="Añadir nuevo recurso">
+                <i class="pi pi-plus"></i>
+                Añadir Recurso
+            </button>
         </div>
     </header>
 
@@ -17,6 +23,10 @@
             'c-resource-card__icon--video': resource.type === 'Video',
             'c-resource-card__icon--link': resource.type === 'Link'
           }"></i>
+                <button class="c-resource-card__delete-btn" (click)="deleteResource(resource._id!)"
+                    title="Eliminar recurso">
+                    <i class="pi pi-trash"></i>
+                </button>
             </div>
 
             <div class="c-resource-card__content">
@@ -40,3 +50,64 @@
         <p class="c-grimoire__empty-text">No se encontraron hechizos con "{{ searchTerm }}"</p>
     </div>
 </section>
+
+<!-- Modal de Creación de Recursos -->
+<div class="c-modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="c-modal" (click)="$event.stopPropagation()">
+        <header class="c-modal__header">
+            <h3 class="c-modal__title">✨ Añadir Nuevo Recurso</h3>
+            <button class="c-modal__close" (click)="closeModal()" title="Cerrar">
+                <i class="pi pi-times"></i>
+            </button>
+        </header>
+
+        <div class="c-modal__body">
+            <div class="c-form-group">
+                <label for="resource-name" class="c-form-label">
+                    Nombre del Recurso <span class="c-form-required">*</span>
+                </label>
+                <input id="resource-name" type="text" class="c-form-input" placeholder="Ej: Fórmulas de Álgebra"
+                    [(ngModel)]="newResource.name" maxlength="100">
+            </div>
+
+            <div class="c-form-group">
+                <label for="resource-type" class="c-form-label">
+                    Tipo de Recurso <span class="c-form-required">*</span>
+                </label>
+                <select id="resource-type" class="c-form-select" [(ngModel)]="newResource.type">
+                    <option value="PDF">📄 PDF</option>
+                    <option value="Video">🎥 Video</option>
+                    <option value="Link">🔗 Link</option>
+                </select>
+            </div>
+
+            <div class="c-form-group">
+                <label for="resource-url" class="c-form-label">
+                    URL del Recurso <span class="c-form-required">*</span>
+                </label>
+                <input id="resource-url" type="url" class="c-form-input" placeholder="https://ejemplo.com/recurso"
+                    [(ngModel)]="newResource.url">
+            </div>
+
+            <div class="c-form-group">
+                <label for="resource-description" class="c-form-label">
+                    Descripción
+                </label>
+                <textarea id="resource-description" class="c-form-textarea"
+                    placeholder="Breve descripción del contenido..." [(ngModel)]="newResource.description" rows="3"
+                    maxlength="500"></textarea>
+            </div>
+        </div>
+
+        <footer class="c-modal__footer">
+            <button class="c-btn c-btn--ghost" (click)="closeModal()">
+                <i class="pi pi-times"></i>
+                Cancelar
+            </button>
+            <button class="c-btn c-btn--primary" (click)="saveResource()">
+                <i class="pi pi-save"></i>
+                Guardar Recurso
+            </button>
+        </footer>
+    </div>
+</div>

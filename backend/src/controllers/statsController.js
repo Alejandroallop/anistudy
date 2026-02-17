@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const Quest = require('../models/Quest');
 const User = require('../models/User');
+const Event = require('../models/Event');
 
 /**
- * @desc    Obtener estadísticas del usuario (Nivel, XP, Misiones)
+ * @desc    Obtener estadísticas del usuario (Nivel, XP, Misiones, Enfoque, Próximo Evento)
  * @route   GET /api/users/stats
  * @access  Private
  */
@@ -11,20 +12,25 @@ const getStats = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    // 1. Buscar todas las misiones del usuario
+    // 1. Buscar usuario actual
+    const currentUser = await User.findById(userId);
+    if (!currentUser) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // 2. Buscar todas las misiones del usuario
     const quests = await Quest.find({ user: userId });
     console.log('🔍 DEBUG STATS - Misiones encontradas:', quests);
 
-    // 2. Calcular contadores
+    // 3. Calcular contadores
     let pendingQuests = 0;
     let inProgressQuests = 0;
     let completedQuests = 0;
     let totalXP = 0;
 
     quests.forEach(quest => {
-      // Blindaje: Trim y LowerCase para evitar errores de 'Completed ' o 'COMPLETED'
       const status = (quest.status || '').toLowerCase().trim();
-      const xpValue = parseInt(quest.xp) || 0; // Asegurar que sea número
+      const xpValue = parseInt(quest.xp) || 0;
 
       if (status === 'completed') {
         completedQuests++;
@@ -36,44 +42,46 @@ const getStats = async (req, res) => {
       }
     });
 
-    // 3. Calcular Nivel (Curva Cuadrática RPG)
-    // Fórmula: Nivel = floor(sqrt(TotalXP / 50)) + 1
-    // Nivel 1: 0-49 XP
-    // Nivel 2: 50-199 XP
-    // Nivel 3: 200-449 XP
-    // ...
+    // 4. Calcular Nivel (Curva Cuadrática RPG)
     const calculatedLevel = Math.floor(Math.sqrt(totalXP / 50)) + 1;
 
-    // 4. Actualizar usuario en la BD (CRÍTICO: Persistencia)
+    // 5. Actualizar usuario en la BD
     await User.findByIdAndUpdate(userId, {
       xp: totalXP,
       level: calculatedLevel
     });
 
-    // 5. Preparar respuesta (Cálculo Relativo para la Barra)
-    // XP necesaria para alcanzar el nivel actual (piso)
-    // Fórmula inversa: XP = 50 * (Nivel-1)^2
+    // 6. Calcular progreso relativo del nivel
     const xpForCurrentLevel = 50 * Math.pow(calculatedLevel - 1, 2);
-    
-    // XP necesaria para el SIGUIENTE nivel (techo)
-    // Fórmula inversa: XP = 50 * (Nivel)^2
     const xpForNextLevel = 50 * Math.pow(calculatedLevel, 2);
-
-    // Progreso dentro del nivel actual (0 a X)
     const xpProgressInLevel = totalXP - xpForCurrentLevel;
-    
-    // Total de XP que pide este nivel (de piso a techo)
     const xpNeededForLevel = xpForNextLevel - xpForCurrentLevel;
 
+    // 7. Buscar misiones activas (no completadas) - máximo 2
+    const activeQuests = quests
+      .filter(q => q.status !== 'completed')
+      .slice(0, 2);
+
+    // 8. Buscar el próximo evento del calendario
+    const nextEvent = await Event.findOne({
+      user: userId,
+      start: { $gte: new Date() }
+    }).sort({ start: 1 });
+
+    // 9. Respuesta completa con todos los datos del dashboard
     res.status(200).json({
       level: calculatedLevel,
-      currentXP: xpProgressInLevel, // Manda el progreso RELATIVO (ej: 25)
-      totalXP: totalXP,             // XP histórica total (ej: 75)
-      nextLevelXP: xpNeededForLevel, // Meta del nivel (ej: 150)
+      currentXP: xpProgressInLevel,
+      totalXP: totalXP,
+      nextLevelXP: xpNeededForLevel,
       completedQuests,
       pendingQuests,
       inProgressQuests,
-      totalQuests: quests.length
+      totalQuests: quests.length,
+      focusTime: currentUser.focusTime || 0,
+      streak: currentUser.streak || 1, // TODO: Implementar lógica de racha
+      activeQuests: activeQuests,
+      nextEvent: nextEvent
     });
 
   } catch (error) {
@@ -82,6 +90,40 @@ const getStats = async (req, res) => {
   }
 };
 
+// @desc    Añadir tiempo de enfoque (Pomodoro)
+// @route   POST /api/users/focus-time
+// @access  Private
+const addFocusTime = async (req, res) => {
+  try {
+    const { minutes } = req.body;
+
+    if (!minutes || typeof minutes !== 'number' || minutes <= 0) {
+      return res.status(400).json({ message: 'Por favor proporciona una cantidad válida de minutos' });
+    }
+
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Sumar los minutos al tiempo total de enfoque
+    user.focusTime += minutes;
+    await user.save();
+
+    console.log(`✅ Usuario ${user.name} completó ${minutes} minutos de enfoque. Total: ${user.focusTime} min`);
+
+    res.status(200).json({
+      success: true,
+      minutesAdded: minutes,
+      totalFocusTime: user.focusTime
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
-  getStats
+  getStats,
+  addFocusTime
 };

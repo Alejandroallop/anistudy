@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ResourceService, Resource } from '../../services/resource.service';
 
 interface SubjectResource {
-  id: number;
+  _id?: string;
+  id?: number;
   name: string;
   type: 'PDF' | 'Link' | 'Video';
-  icon: string;
-  description: string;
+  icon?: string;
+  description?: string;
   url: string;
 }
 
@@ -15,59 +17,39 @@ interface SubjectResource {
   templateUrl: './grimoire.html',
   styleUrls: ['./grimoire.scss']
 })
-export class Grimoire {
+export class Grimoire implements OnInit {
   searchTerm: string = '';
+  resources: SubjectResource[] = [];
+  
+  // Modal state
+  showModal: boolean = false;
+  newResource: Resource = {
+    name: '',
+    type: 'PDF',
+    url: '',
+    description: ''
+  };
 
-  resources: SubjectResource[] = [
-    {
-      id: 1,
-      name: 'Fórmulas de Álgebra',
-      type: 'PDF',
-      icon: 'pi pi-file-pdf',
-      description: 'Compendio de fórmulas algebraicas fundamentales para resolver ecuaciones cuadráticas y sistemas lineales.',
-      url: 'https://es.wikipedia.org/wiki/Álgebra'
-    },
-    {
-      id: 2,
-      name: 'Clase Grabada: Revolución Francesa',
-      type: 'Video',
-      icon: 'pi pi-video',
-      description: 'Sesión completa sobre los eventos históricos que desencadenaron la Revolución Francesa de 1789.',
-      url: 'https://www.youtube.com/watch?v=ttdq818TGD0'
-    },
-    {
-      id: 3,
-      name: 'Vocabulario Japonés JLPT5',
-      type: 'Link',
-      icon: 'pi pi-link',
-      description: 'Lista interactiva de 800+ palabras esenciales para el examen de certificación JLPT nivel N5.',
-      url: 'https://jisho.org/'
-    },
-    {
-      id: 4,
-      name: 'Apuntes de Física: Cinemática',
-      type: 'PDF',
-      icon: 'pi pi-file-pdf',
-      description: 'Teoría y ejercicios resueltos sobre movimiento rectilíneo uniforme y acelerado.',
-      url: 'https://es.wikipedia.org/wiki/Cinemática'
-    },
-    {
-      id: 5,
-      name: 'Tutorial: Arrays en JavaScript',
-      type: 'Video',
-      icon: 'pi pi-video',
-      description: 'Video tutorial explicando métodos de arrays: map, filter, reduce y forEach con ejemplos prácticos.',
-      url: 'https://developer.mozilla.org/es/docs/Web/JavaScript'
-    },
-    {
-      id: 6,
-      name: 'Guía de Gramática Inglesa',
-      type: 'Link',
-      icon: 'pi pi-link',
-      description: 'Recurso online completo sobre tiempos verbales, condicionales y estructura de oraciones.',
-      url: 'https://www.wordreference.com/es/'
-    }
-  ];
+  constructor(
+    private resourceService: ResourceService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.loadResources();
+  }
+
+  loadResources(): void {
+    this.resourceService.getResources().subscribe({
+      next: (resources) => {
+        this.resources = resources;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('❌ Error cargando recursos:', error);
+      }
+    });
+  }
 
   get filteredResources(): SubjectResource[] {
     if (!this.searchTerm.trim()) {
@@ -76,8 +58,65 @@ export class Grimoire {
     const term = this.searchTerm.toLowerCase();
     return this.resources.filter(r => 
       r.name.toLowerCase().includes(term) || 
-      r.description.toLowerCase().includes(term)
+      (r.description?.toLowerCase().includes(term) ?? false)
     );
+  }
+
+  // Modal methods
+  openModal(): void {
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+    this.resetNewResource();
+  }
+
+  resetNewResource(): void {
+    this.newResource = {
+      name: '',
+      type: 'PDF',
+      url: '',
+      description: ''
+    };
+  }
+
+  saveResource(): void {
+    // Validar campos requeridos
+    if (!this.newResource.name || !this.newResource.url) {
+      alert('Por favor, completa los campos obligatorios: Nombre y URL');
+      return;
+    }
+
+    this.resourceService.createResource(this.newResource).subscribe({
+      next: (createdResource) => {
+        console.log('✅ Recurso creado:', createdResource);
+        this.closeModal();
+        this.loadResources(); // Recargar la lista completa
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('❌ Error creando recurso:', error);
+        alert('Error al crear el recurso. Por favor, intenta de nuevo.');
+      }
+    });
+  }
+
+  deleteResource(id: string): void {
+    if (!confirm('¿Estás seguro de que quieres eliminar este recurso?')) {
+      return;
+    }
+
+    this.resourceService.deleteResource(id).subscribe({
+      next: () => {
+        console.log('✅ Recurso eliminado');
+        this.resources = this.resources.filter(r => r._id !== id);
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('❌ Error eliminando recurso:', error);
+      }
+    });
   }
 
   openResource(url: string): void {
