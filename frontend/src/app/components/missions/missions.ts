@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-
+import Swal from 'sweetalert2';
 import { Quest, QuestService } from '../../services/quest.service';
+import { AuthService } from '../../services/auth.service';
 
 // Interface adaptada a lo que devuelve el backend (Quest)
 // Mapearemos 'status' pending -> todo/doing/done en el frontend o usaremos directamente lo que hay.
@@ -24,7 +25,11 @@ export class Missions implements OnInit {
     status: 'pending'
   };
 
-  constructor(private questService: QuestService, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private questService: QuestService,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     console.log('🔄 Iniciando MissionsComponent, cargando datos...');
@@ -67,16 +72,52 @@ export class Missions implements OnInit {
       return; // Ya está completada
     }
 
+    // Guardar nivel actual antes de la petición
+    const levelBefore = this.authService.getUser()?.level ?? 1;
+
     this.questService.updateQuest(quest._id, { status: nextStatus }).subscribe({
       next: (updatedQuest) => {
         console.log(`Misión actualizada a ${nextStatus}:`, updatedQuest);
+
         // Actualizar localmente
         const index = this.quests.findIndex(q => q._id === updatedQuest._id);
         if (index !== -1) {
           this.quests[index] = updatedQuest;
         }
-        // Fix "Doble Click": Forzar repintado inmediato
         this.cdr.detectChanges();
+
+        // Si la misión se completó, verificar subida de nivel
+        if (nextStatus === 'completed') {
+          this.authService.getFreshProfile().subscribe({
+            next: (freshData) => {
+              const levelAfter = freshData.level ?? 1;
+              if (levelAfter > levelBefore) {
+                Swal.fire({
+                  title: '⚔️ ¡SUBIDA DE NIVEL!',
+                  html: `
+                    <div style="font-family: 'Segoe UI', sans-serif; color: #e2e8f0;">
+                      <p style="font-size: 1.3rem; margin-bottom: 8px;">Has alcanzado el
+                        <strong style="color: #f6c90e;">Nivel ${levelAfter}</strong> 🌟
+                      </p>
+                      <p style="color: #a0aec0; font-size: 0.95rem;">
+                        Tus atributos aumentan <strong style="color: #68d391;">+2</strong>:<br>
+                        🧠 INT &nbsp;|&nbsp; 🎯 DIS &nbsp;|&nbsp; 🎨 CRE
+                      </p>
+                    </div>`,
+                  icon: 'success',
+                  background: '#1a1a2e',
+                  color: '#e2e8f0',
+                  confirmButtonText: '¡A seguir estudiando! 🔥',
+                  confirmButtonColor: '#6c63ff',
+                  showClass: {
+                    popup: 'animate__animated animate__bounceIn'
+                  }
+                });
+              }
+            },
+            error: (err) => console.error('Error al obtener perfil fresco:', err)
+          });
+        }
       },
       error: (err) => console.error('Error al actualizar misión:', err)
     });

@@ -34,7 +34,20 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: 'assets/images/default-avatar.png'
+    default: 'assets/images/avatar.png'
+  },
+  attributes: {
+    intelligence: { type: Number, default: 10 },
+    discipline:   { type: Number, default: 10 },
+    creativity:   { type: Number, default: 10 }
+  },
+  stats: {
+    tasksCompleted: { type: Number, default: 0 },
+    streak:         { type: Number, default: 0 }
+  },
+  achievements: {
+    type: [String],
+    default: []
   }
 }, {
   timestamps: true,

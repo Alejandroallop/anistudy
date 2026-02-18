@@ -45,9 +45,9 @@ export class Profile implements OnInit {
       streak: 0
     },
     attributes: {
-      intelligence: 50,
-      discipline: 50,
-      creativity: 50
+      intelligence: 10,
+      discipline: 10,
+      creativity: 10
     },
     achievements: []
   };
@@ -55,23 +55,46 @@ export class Profile implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    const userData = this.authService.getUser();
-    if (userData) {
-      this.user.name = userData.name || 'Estudiante';
-      this.user.level = userData.level || 1;
-      this.user.xp.current = userData.xp || 0;
-      this.user.xp.next = userData.level * 100 + 100; // Fórmula simple de XP
-
-      // Mapear Avatar
-      if (userData.avatar && !userData.avatar.includes('/')) {
-        this.user.avatar = userData.avatar === 'kenji' ? '/assets/images/avatar-kenji.png' : '/assets/images/avatar.png';
-      } else if (userData.avatar) {
-        this.user.avatar = userData.avatar;
-      }
-      
-      // Título basado en nivel (ejemplo simple)
-      this.user.title = `Estudiante Nivel ${this.user.level}`;
+    // 1. Carga inmediata desde caché local (sin esperar al servidor)
+    const localData = this.authService.getUser();
+    if (localData) {
+      this.mapUserData(localData);
     }
+
+    // 2. Petición al servidor para obtener datos frescos de MongoDB
+    this.authService.getFreshProfile().subscribe({
+      next: (freshData) => {
+        this.mapUserData(freshData);
+      },
+      error: (err) => {
+        console.error('⚠️ No se pudo obtener el perfil fresco del servidor:', err);
+      }
+    });
+  }
+
+  private mapUserData(userData: any): void {
+    // Datos básicos
+    this.user.name   = userData.name  || 'Estudiante';
+    this.user.level  = userData.level || 1;
+    this.user.avatar = userData.avatar || 'assets/images/avatar.png';
+    this.user.title  = `Estudiante Nivel ${this.user.level}`;
+
+    // XP
+    this.user.xp.current = userData.xp || 0;
+    this.user.xp.next    = (this.user.level * 100) + 100;
+
+    // Stats
+    this.user.stats.tasks  = userData.stats?.tasksCompleted || 0;
+    this.user.stats.streak = userData.stats?.streak         || 0;
+    this.user.stats.hours  = Math.floor((userData.focusTime || 0) / 60);
+
+    // Atributos RPG
+    this.user.attributes.intelligence = userData.attributes?.intelligence || 10;
+    this.user.attributes.discipline   = userData.attributes?.discipline   || 10;
+    this.user.attributes.creativity   = userData.attributes?.creativity   || 10;
+
+    // Logros
+    this.user.achievements = userData.achievements || [];
   }
 
   get xpPercentage(): number {

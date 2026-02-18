@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -83,7 +83,36 @@ export class AuthService {
    * Obtener usuario actual
    */
   getUser(): any {
-    const user = localStorage.getItem(this.userKey);
-    return user ? JSON.parse(user) : null;
+    const raw = localStorage.getItem(this.userKey);
+    if (!raw) return null;
+
+    const user = JSON.parse(raw);
+
+    // Normalizar avatar: corregir rutas antiguas o vacías
+    if (
+      !user.avatar ||
+      user.avatar.includes('default-avatar') ||
+      user.avatar.includes('frontend')
+    ) {
+      user.avatar = 'assets/images/avatar.png';
+    }
+
+    return user;
+  }
+
+  /**
+   * Obtener perfil fresco desde el backend y actualizar localStorage
+   */
+  getFreshProfile(): Observable<any> {
+    const token = this.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.apiUrl}/profile`, { headers }).pipe(
+      tap((userData: any) => {
+        if (userData) {
+          // Preservar el token actual y actualizar los datos del usuario
+          this.saveSession(token!, { ...userData, token });
+        }
+      })
+    );
   }
 }

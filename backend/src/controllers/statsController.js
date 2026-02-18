@@ -90,7 +90,7 @@ const getStats = async (req, res) => {
   }
 };
 
-// @desc    Añadir tiempo de enfoque (Pomodoro)
+// @desc    Añadir tiempo de enfoque (Pomodoro) con XP y subida de nivel
 // @route   POST /api/users/focus-time
 // @access  Private
 const addFocusTime = async (req, res) => {
@@ -101,24 +101,51 @@ const addFocusTime = async (req, res) => {
       return res.status(400).json({ message: 'Por favor proporciona una cantidad válida de minutos' });
     }
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user._id || req.user.id);
 
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    // Sumar los minutos al tiempo total de enfoque
-    user.focusTime += minutes;
+    // Sumar minutos al tiempo total de enfoque
+    user.focusTime = (user.focusTime || 0) + minutes;
+
+    // Otorgar XP por estudiar (5 XP por minuto)
+    const xpGained = minutes * 5;
+    user.xp = (user.xp || 0) + xpGained;
+
+    // Asegurar que existen los atributos
+    if (!user.attributes) {
+      user.attributes = { intelligence: 10, discipline: 10, creativity: 10 };
+    }
+
+    // Bucle de subida de nivel (misma fórmula que en misiones)
+    let xpNeeded = (user.level * 100) + 100;
+    while (user.xp >= xpNeeded) {
+      user.xp    -= xpNeeded;
+      user.level += 1;
+      user.attributes.intelligence += 2;
+      user.attributes.discipline   += 2;
+      user.attributes.creativity   += 2;
+      xpNeeded = (user.level * 100) + 100;
+      console.log(`🎉 ¡Usuario subió al nivel ${user.level} por Pomodoro!`);
+    }
+
     await user.save();
 
-    console.log(`✅ Usuario ${user.name} completó ${minutes} minutos de enfoque. Total: ${user.focusTime} min`);
+    console.log(`✅ Pomodoro: ${user.name} +${minutes}min (+${xpGained}XP) | Nivel: ${user.level} | FocusTime: ${user.focusTime}min`);
 
     res.status(200).json({
       success: true,
       minutesAdded: minutes,
-      totalFocusTime: user.focusTime
+      xpGained,
+      totalFocusTime: user.focusTime,
+      level: user.level,
+      xp: user.xp,
+      attributes: user.attributes
     });
   } catch (error) {
+    console.error('❌ Error en addFocusTime:', error.message);
     res.status(500).json({ message: error.message });
   }
 };
