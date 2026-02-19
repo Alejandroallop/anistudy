@@ -16,7 +16,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class Missions implements OnInit {
   quests: Quest[] = [];
-  showModal: boolean = false;
+  showModal = false;
   newQuest: Partial<Quest> = {
     title: '',
     description: '',

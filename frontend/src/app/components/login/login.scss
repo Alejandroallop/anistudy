@@ -477,3 +477,18 @@
         transform: translateY(0) scale(1);
     }
 }
+
+/* ==========================================
+   PrimeNG p-password overrides
+   ========================================== */
+
+// Reposition the show/hide toggle button to the right
+.c-login__password ::ng-deep .p-password-toggle {
+    right: 12px;
+    left: auto;
+}
+
+// Remove extra left-padding (lock icon removed, PrimeNG adds padding-left by default)
+.c-login__password ::ng-deep input.c-login__input {
+    padding-left: 12px !important;
+}

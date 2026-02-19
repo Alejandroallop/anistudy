@@ -107,7 +107,7 @@
                 <h3 class="c-section-title"><i class="pi pi-box"></i> Logros Recientes</h3>
                 <div class="c-achievement-list">
                     <div class="c-achievement-item" *ngFor="let icon of user.achievements">
-                        <i [class]="icon"></i>
+                        <i class="c-achievement__icon" [ngClass]="icon"></i>
                     </div>
                     <div class="c-achievement-item c-achievement-item--add">
                         <i class="pi pi-plus"></i>

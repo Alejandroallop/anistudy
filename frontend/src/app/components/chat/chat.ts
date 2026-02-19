@@ -19,7 +19,7 @@ interface Message {
 export class Chat implements AfterViewChecked {
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
   
-  newMessage: string = '';
+  newMessage = '';
   messages: Message[] = [
     {
       id: 1,

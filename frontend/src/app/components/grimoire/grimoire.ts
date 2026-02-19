@@ -18,11 +18,11 @@ interface SubjectResource {
   styleUrls: ['./grimoire.scss']
 })
 export class Grimoire implements OnInit {
-  searchTerm: string = '';
+  searchTerm = '';
   resources: SubjectResource[] = [];
   
   // Modal state
-  showModal: boolean = false;
+  showModal = false;
   newResource: Resource = {
     name: '',
     type: 'PDF',

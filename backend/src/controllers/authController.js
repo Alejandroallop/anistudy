@@ -28,7 +28,7 @@ const buildUserResponse = (user, token) => ({
 const register = async (req, res) => {
   console.log('📩 Petición recibida en el Backend:', req.body);
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, avatar } = req.body;
 
     // Verificar si existe
     const userExists = await User.findOne({ email });
@@ -37,7 +37,7 @@ const register = async (req, res) => {
     }
 
     // Crear usuario
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email, password, avatar });
 
     if (user) {
       res.status(201).json(buildUserResponse(user, generateToken(user._id)));

@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class Login implements OnInit {
   loginForm!: FormGroup;
-  selectedAvatar: string = 'hana'; // Avatar por defecto
+  selectedAvatar = 'hana'; // Avatar por defecto
 
   // Array de avatares disponibles
   avatars = [
@@ -29,8 +29,8 @@ export class Login implements OnInit {
     }
   ];
 
-  isLoginMode: boolean = true;
-  errorMessage: string = '';
+  isLoginMode = true;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -86,7 +86,7 @@ export class Login implements OnInit {
    */
   onSubmit(): void {
     console.log('✅ Botón pulsado, procesando modo:', this.isLoginMode);
-    
+
     if (this.loginForm.invalid) {
       console.warn('⚠️ Formulario inválido:', this.loginForm);
       Object.keys(this.loginForm.controls).forEach(key => {
@@ -109,11 +109,12 @@ export class Login implements OnInit {
         password: formValue.password
       });
     } else {
+      const selectedAvatarObj = this.avatars.find(a => a.id === this.selectedAvatar);
       authObs = this.authService.register({
         name: formValue.name,
         email: formValue.email,
         password: formValue.password,
-        avatar: this.selectedAvatar,
+        avatar: selectedAvatarObj ? selectedAvatarObj.image : '/assets/images/avatar.png',
         // Default values
         level: 1,
         xp: 0
@@ -132,24 +133,6 @@ export class Login implements OnInit {
     });
   }
 
-  /**
-   * Login como usuario demo (Sakura)
-   */
-  onDemoLogin(): void {
-    const demoCredentials = {
-      email: 'demo@anistudy.com',
-      password: '123456',
-      avatar: this.selectedAvatar
-    };
-
-    console.log('Login DEMO con:', demoCredentials);
-
-    // TODO: Implementar llamada al servicio de autenticación con credenciales demo
-    // this.authService.login(demoCredentials).subscribe(...)
-
-    // Por ahora, redirigir al dashboard (temporal)
-    // this.router.navigate(['/dashboard']);
-  }
 
   /**
    * Obtener control del formulario para validaciones

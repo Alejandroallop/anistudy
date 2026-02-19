@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { DashboardService, UserStats } from '../../services/dashboard.service';
+import { DashboardService } from '../../services/dashboard.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -9,25 +9,29 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./home.scss']
 })
 export class Home implements OnInit {
-  userName: string = 'Estudiante';
+  userName = 'Estudiante';
   stats: any = null;
-  userXp: number = 0;
-  userLevel: number = 1;
-  missionsCompleted: number = 0;
-  nextLevelXp: number = 100;
+  userXp = 0;
+  userLevel = 1;
+  missionsCompleted = 0;
+  nextLevelXp = 100;
 
   // Nuevas propiedades del dashboard
-  focusTimeFormatted: string = '0h 0m';
-  userStreak: number = 1;
+  focusTimeFormatted = '0h 0m';
+  userStreak = 1;
   activeQuests: any[] = [];
   nextEvent: any = null;
-  daysToEvent: number = 0;
+  daysToEvent = 0;
+
+  // Notificaciones
+  notificationCount = 0;
+  showNotifications = true;
 
   constructor(
-    private dashboardService: DashboardService, 
+    private dashboardService: DashboardService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit() {
     // 1. Obtener usuario (nombre)
@@ -36,7 +40,10 @@ export class Home implements OnInit {
       this.userName = user.name;
     }
 
-    // 2. Cargar Estadísticas
+    // 2. Leer preferencias de notificaciones
+    this.showNotifications = localStorage.getItem('notifications') !== 'false';
+
+    // 3. Cargar Estadísticas
     this.loadStats();
   }
 
@@ -47,7 +54,7 @@ export class Home implements OnInit {
         const statsData = data as any;
 
         // Mapeo RPG
-        this.userXp = statsData.currentXP || 0; 
+        this.userXp = statsData.currentXP || 0;
         this.nextLevelXp = statsData.nextLevelXP || 100;
         this.userLevel = statsData.level || 1;
         this.missionsCompleted = statsData.completedQuests || 0;
@@ -67,16 +74,22 @@ export class Home implements OnInit {
           this.daysToEvent = Math.ceil(diff / (1000 * 3600 * 24));
         }
 
-        console.log('📊 Stats completas cargadas:', { 
-          xp: this.userXp, 
-          level: this.userLevel, 
+        // Contar notificaciones dinámicamente
+        this.notificationCount = this.activeQuests.length;
+        if (this.nextEvent && this.daysToEvent >= 0 && this.daysToEvent <= 3) {
+          this.notificationCount += 1;
+        }
+
+        console.log('📊 Stats completas cargadas:', {
+          xp: this.userXp,
+          level: this.userLevel,
           completed: this.missionsCompleted,
           focusTime: this.focusTimeFormatted,
           streak: this.userStreak,
           activeQuests: this.activeQuests.length,
           nextEvent: this.nextEvent?.title
         });
-        
+
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error cargando stats:', err)

@@ -357,6 +357,19 @@
     }
 }
 
+// ACHIEVEMENT ICON — FontAwesome glowing golden badge
+.c-achievement__icon {
+    color: #FFD700;
+    font-size: 2rem;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+    transition: filter 0.3s ease, transform 0.3s ease;
+
+    .c-achievement-item:hover & {
+        filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.9));
+        transform: scale(1.15);
+    }
+}
+
 // RESPONSIVE (< 900px)
 @media (max-width: 900px) {
     .c-profile {

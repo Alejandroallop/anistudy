@@ -4,9 +4,10 @@
         <h1 class="greeting-title">¡Konnichiwa, {{ userName }}! 🌸</h1>
         <p class="greeting-subtitle">頑張って！ (¡Haz tu mejor esfuerzo!)</p>
     </div>
-    <div class="notification-pill">
+    <div class="notification-pill" *ngIf="showNotifications && notificationCount > 0">
         <i class="pi pi-bell"></i>
-        <span>Tienes 3 notificaciones nuevas</span>
+        <span>Tienes {{ notificationCount }} {{ notificationCount === 1 ? 'notificación nueva' : 'notificaciones nuevas'
+            }}</span>
     </div>
 </header>
 

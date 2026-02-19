@@ -47,7 +47,6 @@
                 <div class="c-login__group">
                     <label for="password" class="c-login__label">Contraseña</label>
                     <span class="c-login__input-wrapper">
-                        <i class="pi pi-lock c-login__input-icon" aria-hidden="true"></i>
                         <p-password id="password" formControlName="password" placeholder="••••••••" [toggleMask]="true"
                             [feedback]="false" styleClass="c-login__password" inputStyleClass="c-login__input"
                             aria-label="Contraseña"></p-password>
@@ -67,12 +66,6 @@
                     {{ isLoginMode ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión' }}
                 </button>
 
-                <!-- Demo Button -->
-                <button type="button" pButton class="c-login__btn c-login__btn--demo"
-                    aria-label="Probar modo demostración">
-                    <i class="pi pi-play-circle" aria-hidden="true"></i>
-                    <span>Modo Demo</span>
-                </button>
             </form>
 
             <!-- FOOTER -->

@@ -20,11 +20,11 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
   calendarOptions: CalendarOptions = {};
 
   // Modal state
-  isModalOpen: boolean = false;
+  isModalOpen = false;
 
   // Form data
-  newTitle: string = '';
-  newDate: string = '';
+  newTitle = '';
+  newDate = '';
   newType: 'exam' | 'delivery' | 'class' = 'exam';
 
   // Inyectar ChangeDetectorRef y EventService

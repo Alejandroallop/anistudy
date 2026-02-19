@@ -9,11 +9,12 @@
         "sourceType": "module"
     },
     "rules": {
-        "no-console": "warn",
+        "no-console": "off",
         "no-unused-vars": [
             "warn",
             {
-                "argsIgnorePattern": "^_"
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_"
             }
         ],
         "no-undef": "error",

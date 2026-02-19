@@ -9,10 +9,10 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './dashboard.scss'
 })
 export class Dashboard implements OnInit {
-  userName: string = 'Estudiante';
-  userLevel: number = 1;
-  userAvatar: string = '/assets/images/avatar.png'; // Fallback
-  userXp: number = 0;
+  userName = 'Estudiante';
+  userLevel = 1;
+  userAvatar = '/assets/images/avatar.png'; // Fallback
+  userXp = 0;
 
   constructor(private router: Router, private authService: AuthService) { }
 

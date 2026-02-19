@@ -10,6 +10,14 @@
     margin-bottom: 32px;
 
     .greeting {
+        background: rgba(255, 255, 255, 0.70);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 16px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        margin-bottom: 0; // margin-bottom is on .dashboard-header itself
+
         .greeting-title {
             font-size: 32px;
             font-weight: 800;

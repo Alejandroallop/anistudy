@@ -95,14 +95,24 @@ const updateQuest = async (req, res) => {
           // ⭐ Sistema de Logros Automáticos
           if (!user.achievements) user.achievements = [];
 
-          if (user.stats.tasksCompleted === 1 && !user.achievements.includes('pi pi-star-fill')) {
-            user.achievements.push('pi pi-star-fill');
+          if (user.stats.tasksCompleted === 1 && !user.achievements.includes('fas fa-star')) {
+            user.achievements.push('fas fa-star');
             console.log('🏅 Logro desbloqueado: Primera misión completada');
           }
 
-          if (user.stats.tasksCompleted === 5 && !user.achievements.includes('pi pi-trophy')) {
-            user.achievements.push('pi pi-trophy');
+          if (user.stats.tasksCompleted === 5 && !user.achievements.includes('fas fa-medal')) {
+            user.achievements.push('fas fa-medal');
             console.log('🏆 Logro desbloqueado: 5 misiones completadas');
+          }
+
+          if (user.stats.tasksCompleted >= 10 && !user.achievements.includes('fas fa-khanda')) {
+            user.achievements.push('fas fa-khanda');
+            console.log('⚔️  Logro desbloqueado: 10 misiones completadas');
+          }
+
+          if (user.level >= 5 && !user.achievements.includes('fas fa-crown')) {
+            user.achievements.push('fas fa-crown');
+            console.log('👑 Logro desbloqueado: Nivel 5 alcanzado');
           }
 
           await user.save();

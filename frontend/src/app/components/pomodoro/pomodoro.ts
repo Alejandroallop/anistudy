@@ -1,6 +1,8 @@
 import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import confetti from 'canvas-confetti';
+import Swal from 'sweetalert2';
 import { DashboardService } from '../../services/dashboard.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-pomodoro',
@@ -10,9 +12,9 @@ import { DashboardService } from '../../services/dashboard.service';
 })
 export class Pomodoro implements OnDestroy {
   // Timer variables
-  minutes: number = 25;
-  seconds: number = 0;
-  isRunning: boolean = false;
+  minutes = 25;
+  seconds = 0;
+  isRunning = false;
   currentMode: 'focus' | 'break' = 'focus';
 
   private intervalId: any = null;
@@ -24,7 +26,7 @@ export class Pomodoro implements OnDestroy {
 
   // Audio Player variables
   private audio: HTMLAudioElement | null = null;
-  isMusicPlaying: boolean = false;
+  isMusicPlaying = false;
 
   // Sonido de victoria
   private finishSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
@@ -32,10 +34,11 @@ export class Pomodoro implements OnDestroy {
   // Inyectar ChangeDetectorRef y DashboardService
   constructor(
     private cdr: ChangeDetectorRef,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private authService: AuthService
   ) {
     this.initAudio();
-    this.finishSound.volume = 0.6; // Volumen del sonido de victoria
+    this.finishSound.volume = 0.6;
   }
 
   /**
@@ -167,26 +170,70 @@ export class Pomodoro implements OnDestroy {
   private onTimerComplete() {
     this.pauseTimer();
 
-    // 🎉 REPRODUCIR SONIDO DE VICTORIA
-    try {
-      this.finishSound.currentTime = 0; // Reiniciar sonido
-      this.finishSound.play().catch(err => console.error('Error reproduciendo sonido:', err));
-    } catch (error) {
-      console.error('Error con sonido de victoria:', error);
+    // 🎉 SONIDO Y CONFETTI (respetan preferencias del usuario)
+    if (localStorage.getItem('soundEffects') !== 'false') {
+      // 🎉 REPRODUCIR SONIDO DE VICTORIA
+      try {
+        this.finishSound.currentTime = 0;
+        this.finishSound.play().catch(err => console.error('Error reproduciendo sonido:', err));
+      } catch (error) {
+        console.error('Error con sonido de victoria:', error);
+      }
+
+      // 🎊 LANZAR CONFETTI EXPLOSIVO
+      this.launchConfetti();
     }
 
-    // 🎊 LANZAR CONFETTI EXPLOSIVO
-    this.launchConfetti();
-
-    // 📊 REGISTRAR TIEMPO DE ENFOQUE EN EL BACKEND
+    // 📊 REGISTRAR TIEMPO DE ENFOQUE + ALERTAS
     if (this.currentMode === 'focus') {
+      const oldLevel = this.authService.getUser()?.level || 1;
+
       this.dashboardService.addFocusTime(this.FOCUS_TIME).subscribe({
-        next: (response) => {
-          console.log(`✅ ¡Tiempo registrado! ${response.minutesAdded} minutos. Total: ${response.totalFocusTime} min`);
+        next: () => {
+          // Traer perfil actualizado del servidor
+          this.authService.getFreshProfile().subscribe({
+            next: (freshData) => {
+              if (freshData.level > oldLevel) {
+                // 👑 SUBIDA DE NIVEL — alerta épica
+                Swal.fire({
+                  title: '⚔️ ¡SUBIDA DE NIVEL!',
+                  html: `
+                    <div style="font-family: 'Segoe UI', sans-serif; color: #e2e8f0;">
+                      <p style="font-size: 1.3rem; margin-bottom: 8px;">Has alcanzado el
+                        <strong style="color: #f6c90e;">Nivel ${freshData.level}</strong> 🌟
+                      </p>
+                      <p style="color: #a0aec0; font-size: 0.95rem;">
+                        Tus atributos aumentan <strong style="color: #68d391;">+2</strong>:<br>
+                        🧠 INT &nbsp;|&nbsp; 🎯 DIS &nbsp;|&nbsp; 🎨 CRE
+                      </p>
+                    </div>`,
+                  icon: 'success',
+                  background: '#1a1a2e',
+                  color: '#e2e8f0',
+                  confirmButtonText: '¡A seguir estudiando! 🔥',
+                  confirmButtonColor: '#6c63ff',
+                  showClass: { popup: 'animate__animated animate__bounceIn' }
+                });
+              } else {
+                // ⭐ SESIÓN COMPLETADA — toast sencillo
+                Swal.fire({
+                  toast: true,
+                  position: 'top-end',
+                  icon: 'success',
+                  title: `¡Sesión Completada!`,
+                  text: `Has ganado +${this.FOCUS_TIME * 5} XP 💫`,
+                  background: '#1a1a2e',
+                  color: '#e2e8f0',
+                  showConfirmButton: false,
+                  timer: 3500,
+                  timerProgressBar: true
+                });
+              }
+            },
+            error: (err) => console.error('Error al obtener perfil fresco:', err)
+          });
         },
-        error: (error) => {
-          console.error('❌ Error registrando tiempo de enfoque:', error);
-        }
+        error: (err) => console.error('❌ Error registrando tiempo de enfoque:', err)
       });
     }
 

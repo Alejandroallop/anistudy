@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-settings',
@@ -7,38 +8,66 @@ import { Router } from '@angular/router';
   templateUrl: './settings.html',
   styleUrls: ['./settings.scss']
 })
-export class Settings {
+export class Settings implements OnInit {
   // Preferencias de usuario
-  darkMode: boolean = false;
-  notifications: boolean = true;
-  soundEffects: boolean = true;
+  darkMode = false;
+  notifications = true;
+  soundEffects = true;
 
-  // Información de perfil
-  username: string = 'Estudiante';
-  email: string = 'student@anistudy.com';
+  // Información de perfil (solo lectura)
+  username = '';
+  email = '';
+  avatarUrl = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) { }
+
+  ngOnInit(): void {
+    // --- Fase 1: Cargar datos del usuario desde AuthService ---
+    const user = this.authService.getUser();
+    if (user) {
+      this.username = user.name || 'Estudiante';
+      this.email = user.email || '';
+      this.avatarUrl = user.avatar || 'assets/images/avatar_demo.png';
+    }
+
+    // --- Fase 2: Leer preferencias guardadas en localStorage ---
+    this.darkMode = localStorage.getItem('darkMode') === 'true';
+    this.notifications = localStorage.getItem('notifications') !== 'false';
+    this.soundEffects = localStorage.getItem('soundEffects') !== 'false';
+  }
 
   saveChanges(): void {
-    console.log('💾 Guardando cambios de configuración...');
-    console.log('Dark Mode:', this.darkMode);
-    console.log('Notifications:', this.notifications);
-    console.log('Sound Effects:', this.soundEffects);
-    console.log('Username:', this.username);
-    console.log('Email:', this.email);
-    
-    alert('¡Ajustes guardados correctamente! ✨');
+    // Persistir en localStorage
+    localStorage.setItem('darkMode', String(this.darkMode));
+    localStorage.setItem('notifications', String(this.notifications));
+    localStorage.setItem('soundEffects', String(this.soundEffects));
+
+    // Aplicar Modo Oscuro al DOM en tiempo real
+    if (this.darkMode) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+
+    console.log('💾 Ajustes guardados:', { darkMode: this.darkMode, notifications: this.notifications, soundEffects: this.soundEffects });
+
+    // Feedback visual sin alert nativo
+    const btn = document.querySelector('.c-btn--primary') as HTMLButtonElement;
+    if (btn) {
+      const original = btn.textContent;
+      btn.textContent = '✅ ¡Guardado!';
+      btn.disabled = true;
+      setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 2000);
+    }
   }
 
   logout(): void {
-    console.log('👋 Cerrando sesión...');
-    
     if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      // Aquí podrías limpiar el localStorage o sessionStorage
-      // localStorage.clear();
-      
-      alert('Cerrando sesión...');
-      this.router.navigate(['/login']);
+      document.body.classList.remove('dark-theme');
+      this.authService.logout();
     }
   }
 }
