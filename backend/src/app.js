@@ -10,8 +10,19 @@ const app = express();
 app.use(helmet());
 
 // CORS
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+  : ['http://localhost:4200'];
+
 app.use(cors({
-  origin: 'http://localhost:4200', // Angular Frontend
+  origin: (origin, callback) => {
+    // Permitir peticiones sin origin (ej. Postman, servidores back-to-back)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS: origen no permitido → ${origin}`));
+  },
   credentials: true
 }));
 
