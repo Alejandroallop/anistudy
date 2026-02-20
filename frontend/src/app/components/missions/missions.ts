@@ -32,7 +32,6 @@ export class Missions implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('🔄 Iniciando MissionsComponent, cargando datos...');
     this.loadQuests();
   }
 
@@ -40,8 +39,7 @@ export class Missions implements OnInit {
     this.questService.getQuests().subscribe({
       next: (data) => {
         this.quests = data;
-        console.log('Misiones cargadas:', this.quests);
-        this.cdr.markForCheck(); // Forzar detección de cambios
+        this.cdr.markForCheck();
       },
       error: (err) => console.error('Error al cargar misiones:', err)
     });
@@ -77,7 +75,6 @@ export class Missions implements OnInit {
 
     this.questService.updateQuest(quest._id, { status: nextStatus }).subscribe({
       next: (updatedQuest) => {
-        console.log(`Misión actualizada a ${nextStatus}:`, updatedQuest);
 
         // Actualizar localmente
         const index = this.quests.findIndex(q => q._id === updatedQuest._id);
@@ -149,9 +146,7 @@ export class Missions implements OnInit {
   }
 
   saveQuest(): void {
-    console.log('Botón guardar clickeado', this.newQuest);
     if (!this.newQuest.title || !this.newQuest.description) {
-        console.warn('Faltan campos requeridos');
         return;
     }
 
@@ -159,10 +154,9 @@ export class Missions implements OnInit {
     this.updateXpByRank();
 
     this.questService.createQuest(this.newQuest as Quest).subscribe({
-      next: (createdQuest) => {
-        console.log('Misión creada:', createdQuest);
+      next: () => {
         this.closeModal();
-        this.loadQuests(); // Refrescar la lista inmediatamente
+        this.loadQuests();
       },
       error: (err) => console.error('Error al crear misión:', err)
     });
@@ -174,9 +168,7 @@ export class Missions implements OnInit {
     if (confirm('¿Estás seguro de que quieres borrar esta misión?')) {
       this.questService.deleteQuest(id).subscribe({
         next: () => {
-          console.log('Misión eliminada:', id);
-          // Opción 1: Recargar todo (más seguro)
-          this.loadQuests(); 
+          this.loadQuests();
         },
         error: (err) => console.error('Error al eliminar misión:', err)
       });

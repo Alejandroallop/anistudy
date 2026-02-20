@@ -27,7 +27,6 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
   newDate = '';
   newType: 'exam' | 'delivery' | 'class' = 'exam';
 
-  // Inyectar ChangeDetectorRef y EventService
   constructor(
     private cd: ChangeDetectorRef,
     private eventService: EventService
@@ -40,7 +39,7 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
       initialView: 'dayGridMonth',
       locale: 'es',
 
-      // 🔥 OCULTAR HEADER POR DEFECTO (usamos controles personalizados)
+      // Ocultar header por defecto (usamos controles personalizados)
       headerToolbar: false,
 
       buttonText: {
@@ -68,46 +67,30 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
     // Cargar eventos desde la base de datos
     this.loadEvents();
 
-    // 🔥 FORZAR DETECCIÓN DE CAMBIOS - Elimina el error NG0100
+    // Forzar detección de cambios para evitar el error NG0100
     this.cd.detectChanges();
   }
 
   ngAfterViewInit() {
-    // 🔍 LOG: Verificar que el calendario se ha inicializado
-    console.log('📅 ngAfterViewInit - Verificando inicialización del calendario');
-    console.log('🔍 Estado de calendarComponent:', this.calendarComponent);
-
-    if (this.calendarComponent) {
-      console.log('✅ FullCalendar component encontrado correctamente');
-    } else {
-      console.error('❌ ERROR: calendarComponent es undefined o null');
-    }
-
-    // 🚀 MOVER EL MODAL AL BODY PARA ESCAPAR DEL STACKING CONTEXT
+    // Mover el modal al body para escapar del stacking context de CSS
     if (this.modalOverlay && this.modalOverlay.nativeElement) {
-      console.log('📦 Moviendo modal al <body>...');
       document.body.appendChild(this.modalOverlay.nativeElement);
-      console.log('✅ Modal movido al <body> exitosamente');
     }
   }
 
   ngOnDestroy() {
-    // 🧹 LIMPIAR: Remover el modal del body al destruir el componente
+    // Limpiar: remover el modal del body al destruir el componente
     if (this.modalOverlay && this.modalOverlay.nativeElement && this.modalOverlay.nativeElement.parentNode) {
-      console.log('🧹 Removiendo modal del <body>...');
       this.modalOverlay.nativeElement.parentNode.removeChild(this.modalOverlay.nativeElement);
     }
   }
 
   /**
-   * Carga eventos desde la base de datos
+   * Carga eventos desde la base de datos y los mapea al formato de FullCalendar
    */
   loadEvents(): void {
     this.eventService.getEvents().subscribe({
       next: (events) => {
-        console.log('📅 Eventos cargados desde la BD:', events);
-        
-        // Mapear eventos de BD al formato de FullCalendar
         const mappedEvents: EventInput[] = events.map(event => {
           let backgroundColor = '#FF477E';
           let emoji = '📚';
@@ -142,10 +125,8 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
           };
         });
 
-        // Actualizar eventos en el calendario
         this.calendarOptions.events = mappedEvents;
         this.cd.detectChanges();
-        console.log('✅ Calendario actualizado con eventos de la BD');
       },
       error: (error) => {
         console.error('❌ Error cargando eventos:', error);
@@ -154,19 +135,15 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Abre el modal para crear evento
+   * Abre el modal para crear un nuevo evento
    */
   openModal() {
-    console.log('✅ openModal() llamado - abriendo modal');
     this.isModalOpen = true;
     // Establecer fecha de hoy como default
     const today = new Date().toISOString().split('T')[0];
     this.newDate = today;
-    console.log('✅ isModalOpen ahora es:', this.isModalOpen);
-    console.log('✅ Fecha establecida:', this.newDate);
 
-    // ¡LA LÍNEA MÁGICA! Fuerza la actualización de la vista
-    // FullCalendar ejecuta callbacks fuera de NgZone
+    // Forzar la actualización de la vista (FullCalendar ejecuta callbacks fuera de NgZone)
     this.cd.detectChanges();
   }
 
@@ -174,49 +151,33 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
    * Cierra el modal y limpia el formulario
    */
   closeModal() {
-    console.log('❌ closeModal() llamado');
     this.isModalOpen = false;
     this.newTitle = '';
     this.newDate = '';
     this.newType = 'exam';
 
-    // Forzar actualización de la vista
     this.cd.detectChanges();
   }
 
   /**
-   * Añade un nuevo evento al calendario
+   * Añade un nuevo evento al calendario guardándolo en la BD
    */
   addEvent() {
-    console.log('🎯 addEvent() llamado con:', {
-      title: this.newTitle,
-      date: this.newDate,
-      type: this.newType
-    });
-
-    // Validación
     if (!this.newTitle.trim() || !this.newDate) {
-      console.log('⚠️ Validación fallida - campos vacíos');
       alert('Por favor completa el título y la fecha');
       return;
     }
 
-    // Crear evento en la base de datos
     const newEvent: CalendarEvent = {
       title: this.newTitle,
       type: this.newType,
-      start: this.newDate, // El backend requiere este nombre
+      start: this.newDate,
       allDay: true
     };
 
     this.eventService.createEvent(newEvent).subscribe({
-      next: (createdEvent) => {
-        console.log('✅ Evento creado en BD:', createdEvent);
-        
-        // Recargar todos los eventos desde el servidor
+      next: () => {
         this.loadEvents();
-        
-        // Cerrar modal y limpiar
         this.closeModal();
       },
       error: (error) => {
@@ -227,39 +188,31 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Maneja el click en una fecha
+   * Abre el modal con la fecha clickeada preseleccionada
    */
   handleDateClick(arg: DateClickArg) {
-    console.log('📅 Click en fecha detectado:', arg.dateStr);
-    // Abrir modal con la fecha seleccionada
     this.newDate = arg.dateStr;
     this.openModal();
   }
 
   /**
-   * Maneja el click en un evento
+   * Muestra un diálogo de confirmación para eliminar el evento clickeado
    */
   handleEventClick(arg: EventClickArg) {
-    console.log('📌 Click en evento detectado:', arg.event.title);
     const confirmDelete = confirm(`${arg.event.title}\nFecha: ${arg.event.startStr}\n\n¿Eliminar este evento?`);
 
     if (confirmDelete) {
-      // Obtener el _id del evento
       const eventId = arg.event.extendedProps['_id'] || arg.event.id;
-      
+
       if (!eventId) {
         console.error('❌ Error: evento sin ID');
         alert('Error: no se puede eliminar el evento');
         return;
       }
 
-      // Eliminar del backend
       this.eventService.deleteEvent(eventId).subscribe({
         next: () => {
-          console.log('✅ Evento eliminado de BD');
-          // Eliminar de la vista de FullCalendar
           arg.event.remove();
-          console.log('🗑️ Evento eliminado de la vista');
         },
         error: (error) => {
           console.error('❌ Error eliminando evento:', error);
@@ -277,17 +230,12 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
    * Navega al mes anterior
    */
   handlePrev() {
-    console.log('⬅️ 1. Botón Anterior pulsado');
-    console.log('🔍 2. Estado del componente calendario:', this.calendarComponent);
-
     if (this.calendarComponent) {
-      console.log('✅ 3. API encontrada, intentando mover al mes anterior...');
       const calendarApi = this.calendarComponent.getApi();
       calendarApi.prev();
-      this.cd.detectChanges(); // Force title update
-      console.log('✅ 4. Navegación completada. Nuevo mes:', calendarApi.view.title);
+      this.cd.detectChanges();
     } else {
-      console.error('❌ ERROR CRÍTICO: No encuentro la referencia #calendar. ¿Está bien puesta en el HTML?');
+      console.error('❌ Error crítico: referencia #calendar no encontrada');
     }
   }
 
@@ -295,17 +243,12 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
    * Navega al mes siguiente
    */
   handleNext() {
-    console.log('➡️ 1. Botón Siguiente pulsado');
-    console.log('🔍 2. Estado del componente calendario:', this.calendarComponent);
-
     if (this.calendarComponent) {
-      console.log('✅ 3. API encontrada, intentando mover al mes siguiente...');
       const calendarApi = this.calendarComponent.getApi();
       calendarApi.next();
-      this.cd.detectChanges(); // Force title update
-      console.log('✅ 4. Navegación completada. Nuevo mes:', calendarApi.view.title);
+      this.cd.detectChanges();
     } else {
-      console.error('❌ ERROR CRÍTICO: No encuentro la referencia #calendar. ¿Está bien puesta en el HTML?');
+      console.error('❌ Error crítico: referencia #calendar no encontrada');
     }
   }
 
@@ -313,17 +256,12 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
    * Navega a la fecha actual
    */
   handleToday() {
-    console.log('🎯 1. Botón Hoy pulsado');
-    console.log('🔍 2. Estado del componente calendario:', this.calendarComponent);
-
     if (this.calendarComponent) {
-      console.log('✅ 3. API encontrada, intentando volver a hoy...');
       const calendarApi = this.calendarComponent.getApi();
       calendarApi.today();
-      this.cd.detectChanges(); // Force title update
-      console.log('✅ 4. Navegación completada. Mes actual:', calendarApi.view.title);
+      this.cd.detectChanges();
     } else {
-      console.error('❌ ERROR CRÍTICO: No encuentro la referencia #calendar. ¿Está bien puesta en el HTML?');
+      console.error('❌ Error crítico: referencia #calendar no encontrada');
     }
   }
 
@@ -362,7 +300,7 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Formatea una fecha para mostrar
+   * Formatea una fecha para mostrar en la lista de próximos eventos
    */
   formatDate(dateStr: string): string {
     const date = new Date(dateStr);

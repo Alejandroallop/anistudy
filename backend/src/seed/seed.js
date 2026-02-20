@@ -70,7 +70,7 @@ const seedDatabase = async () => {
         tasksCompleted: 12,
         streak: 7
       },
-      achievements: ['fas fa-star', 'fas fa-medal', 'fas fa-crown', 'fas fa-khanda']
+      achievements: ['pi pi-star-fill', 'pi pi-medal', 'pi pi-crown', 'pi pi-bolt']
     });
     log('green', `✅ Creado: ${sakura.name} | Email: ${sakura.email} | Nivel: ${sakura.level}\n`);
 

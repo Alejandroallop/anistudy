@@ -52,7 +52,7 @@ export class Settings implements OnInit {
       document.body.classList.remove('dark-theme');
     }
 
-    console.log('💾 Ajustes guardados:', { darkMode: this.darkMode, notifications: this.notifications, soundEffects: this.soundEffects });
+
 
     // Feedback visual sin alert nativo
     const btn = document.querySelector('.c-btn--primary') as HTMLButtonElement;

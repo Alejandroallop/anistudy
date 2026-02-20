@@ -89,10 +89,9 @@ export class Grimoire implements OnInit {
     }
 
     this.resourceService.createResource(this.newResource).subscribe({
-      next: (createdResource) => {
-        console.log('✅ Recurso creado:', createdResource);
+      next: () => {
         this.closeModal();
-        this.loadResources(); // Recargar la lista completa
+        this.loadResources();
         this.cdr.detectChanges();
       },
       error: (error) => {
@@ -109,7 +108,6 @@ export class Grimoire implements OnInit {
 
     this.resourceService.deleteResource(id).subscribe({
       next: () => {
-        console.log('✅ Recurso eliminado');
         this.resources = this.resources.filter(r => r._id !== id);
         this.cdr.detectChanges();
       },
@@ -120,7 +118,6 @@ export class Grimoire implements OnInit {
   }
 
   openResource(url: string): void {
-    console.log('📖 Abriendo recurso:', url);
     window.open(url, '_blank');
   }
 }

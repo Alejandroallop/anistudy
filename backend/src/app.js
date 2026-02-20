@@ -67,7 +67,9 @@ app.use((req, res) => {
 
 // Manejo global de errores
 app.use((err, req, res, _next) => {
-  console.error('Error:', err);
+  if (process.env.NODE_ENV === 'development') {
+    console.error('Error:', err);
+  }
   res.status(err.status || 500).json({
     error: process.env.NODE_ENV === 'development' ? err.message : 'Error interno del servidor'
   });

@@ -19,7 +19,6 @@ const getStats = async (req, res) => {
 
     // 2. Buscar todas las misiones del usuario
     const quests = await Quest.find({ user: userId });
-    console.log('🔍 DEBUG STATS - Misiones encontradas:', quests);
 
     // 3. Calcular contadores
     let pendingQuests = 0;
@@ -100,7 +99,7 @@ const addFocusTime = async (req, res) => {
       return res.status(400).json({ message: 'Por favor proporciona una cantidad válida de minutos' });
     }
 
-    const user = await User.findById(req.user._id || req.user.id);
+    const user = await User.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });

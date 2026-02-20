@@ -80,16 +80,6 @@ export class Home implements OnInit {
           this.notificationCount += 1;
         }
 
-        console.log('📊 Stats completas cargadas:', {
-          xp: this.userXp,
-          level: this.userLevel,
-          completed: this.missionsCompleted,
-          focusTime: this.focusTimeFormatted,
-          streak: this.userStreak,
-          activeQuests: this.activeQuests.length,
-          nextEvent: this.nextEvent?.title
-        });
-
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error cargando stats:', err)

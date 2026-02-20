@@ -26,7 +26,6 @@ const buildUserResponse = (user, token) => ({
 // @desc    Registrar usuario
 // @route   POST /api/auth/register
 const register = async (req, res) => {
-  console.log('📩 Petición recibida en el Backend:', req.body);
   try {
     const { name, email, password, avatar } = req.body;
 

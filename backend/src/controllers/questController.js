@@ -6,7 +6,7 @@ const User  = require('../models/User');
 // @access  Private
 const getQuests = async (req, res) => {
   try {
-    const quests = await Quest.find({ user: req.user.id });
+    const quests = await Quest.find({ user: req.user._id });
     res.status(200).json(quests);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -29,7 +29,7 @@ const createQuest = async (req, res) => {
       description,
       rank: rank || 'C',
       xp: xp || 10,
-      user: req.user.id
+      user: req.user._id
     });
 
     res.status(201).json(quest);
@@ -50,7 +50,7 @@ const updateQuest = async (req, res) => {
     }
 
     // Verificar que el usuario sea el dueño de la misión
-    if (quest.user.toString() !== req.user.id) {
+    if (quest.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: 'No autorizado' });
     }
 
@@ -65,7 +65,7 @@ const updateQuest = async (req, res) => {
     // ============================================================
     if (req.body.status === 'completed' && quest.status !== 'completed') {
       try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user._id);
 
         if (user) {
           // Sumar XP de la misión
@@ -143,7 +143,7 @@ const deleteQuest = async (req, res) => {
     }
 
     // Verificar que el usuario sea el dueño de la misión
-    if (quest.user.toString() !== req.user.id) {
+    if (quest.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: 'No autorizado' });
     }
 

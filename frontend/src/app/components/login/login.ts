@@ -78,23 +78,13 @@ export class Login implements OnInit {
    */
   selectAvatar(avatar: string): void {
     this.selectedAvatar = avatar;
-    console.log('Avatar seleccionado:', avatar);
   }
 
   /**
    * Login normal
    */
   onSubmit(): void {
-    console.log('✅ Botón pulsado, procesando modo:', this.isLoginMode);
-
     if (this.loginForm.invalid) {
-      console.warn('⚠️ Formulario inválido:', this.loginForm);
-      Object.keys(this.loginForm.controls).forEach(key => {
-        const controlErrors = this.loginForm.get(key)?.errors;
-        if (controlErrors) {
-          console.error(`Error en campo ${key}:`, controlErrors);
-        }
-      });
       this.loginForm.markAllAsTouched();
       return;
     }
@@ -122,8 +112,7 @@ export class Login implements OnInit {
     }
 
     authObs.subscribe({
-      next: (res) => {
-        console.log('Auth exitoso:', res);
+      next: () => {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
