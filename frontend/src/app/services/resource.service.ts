@@ -15,7 +15,7 @@ export interface Resource {
   providedIn: 'root'
 })
 export class ResourceService {
-  private apiUrl = 'http://localhost:3000/api/resources';
+  private apiUrl = 'https://anistudy-backend.onrender.com/api/resources';
 
   constructor(private http: HttpClient) {}
 

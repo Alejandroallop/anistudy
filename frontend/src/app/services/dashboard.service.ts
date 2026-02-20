@@ -19,7 +19,7 @@ export interface UserStats {
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = 'http://localhost:3000/api/users';
+  private apiUrl = 'https://anistudy-backend.onrender.com/api/users';
   private statsUrl = `${this.apiUrl}/stats`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}

@@ -15,7 +15,7 @@ export interface CalendarEvent {
   providedIn: 'root'
 })
 export class EventService {
-  private apiUrl = 'http://localhost:3000/api/events';
+  private apiUrl = 'https://anistudy-backend.onrender.com/api/events';
 
   constructor(private http: HttpClient) {}
 

@@ -17,7 +17,7 @@ export interface Quest {
   providedIn: 'root'
 })
 export class QuestService {
-  private apiUrl = 'http://localhost:3000/api/quests';
+  private apiUrl = 'https://anistudy-backend.onrender.com/api/quests';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
