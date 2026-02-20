@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { API_BASE_URL } from 'config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://anistudy-backend.onrender.com/api/auth';
+  private apiUrl = `${API_BASE_URL}/auth`;
   private tokenKey = 'auth_token';
   private userKey = 'auth_user';
 

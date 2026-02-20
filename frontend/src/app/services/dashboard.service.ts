@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { API_BASE_URL } from 'config';
 
 export interface UserStats {
   level: number;
@@ -19,7 +20,7 @@ export interface UserStats {
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = 'https://anistudy-backend.onrender.com/api/users';
+  private apiUrl = `${API_BASE_URL}/users`;
   private statsUrl = `${this.apiUrl}/stats`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}

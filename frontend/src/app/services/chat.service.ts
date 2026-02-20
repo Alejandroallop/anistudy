@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from 'config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  private apiUrl = 'https://anistudy-backend.onrender.com/api/chat';
+  private apiUrl = `${API_BASE_URL}/chat`;
 
   constructor(private http: HttpClient) {}
 

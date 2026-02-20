@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from 'config';
 
 export interface Resource {
   _id?: string;
@@ -15,7 +16,7 @@ export interface Resource {
   providedIn: 'root'
 })
 export class ResourceService {
-  private apiUrl = 'https://anistudy-backend.onrender.com/api/resources';
+  private apiUrl = `${API_BASE_URL}/resources`;
 
   constructor(private http: HttpClient) {}
 

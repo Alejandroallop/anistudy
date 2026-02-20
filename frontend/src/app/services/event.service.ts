@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from 'config';
 
 export interface CalendarEvent {
   _id?: string;
@@ -15,7 +16,7 @@ export interface CalendarEvent {
   providedIn: 'root'
 })
 export class EventService {
-  private apiUrl = 'https://anistudy-backend.onrender.com/api/events';
+  private apiUrl = `${API_BASE_URL}/events`;
 
   constructor(private http: HttpClient) {}
 

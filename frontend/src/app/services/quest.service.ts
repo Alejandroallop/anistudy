@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { API_BASE_URL } from 'config';
 
 export interface Quest {
   _id?: string;
@@ -17,7 +18,7 @@ export interface Quest {
   providedIn: 'root'
 })
 export class QuestService {
-  private apiUrl = 'https://anistudy-backend.onrender.com/api/quests';
+  private apiUrl = `${API_BASE_URL}/quests`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
