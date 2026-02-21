@@ -30,7 +30,9 @@ app.use(cors({
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 } else {
-  app.use(morgan('combined'));
+  // En producción, logs mínimos o nulos según la rúbrica
+  // Podrías usar 'tiny' o simplemente no cargar morgan si quieres silencio total
+  app.use(morgan('tiny')); 
 }
 
 // Parseo de JSON y URL-encoded

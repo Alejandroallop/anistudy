@@ -9,7 +9,8 @@ const getQuests = async (req, res) => {
     const quests = await Quest.find({ user: req.user._id });
     res.status(200).json(quests);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
@@ -34,7 +35,8 @@ const createQuest = async (req, res) => {
 
     res.status(201).json(quest);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
@@ -127,7 +129,8 @@ const updateQuest = async (req, res) => {
 
     res.status(200).json(updatedQuest);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
@@ -151,7 +154,8 @@ const deleteQuest = async (req, res) => {
 
     res.status(200).json({ id: req.params.id });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 

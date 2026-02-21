@@ -1,10 +1,10 @@
 <!-- Header con Saludo y Notificaciones -->
-<header class="dashboard-header">
-    <div class="greeting">
-        <h1 class="greeting-title">¡Konnichiwa, {{ userName }}! 🌸</h1>
-        <p class="greeting-subtitle">頑張って！ (¡Haz tu mejor esfuerzo!)</p>
+<header class="c-dashboard-header">
+    <div class="c-greeting">
+        <h1 class="c-greeting__title">¡Konnichiwa, {{ userName }}! 🌸</h1>
+        <p class="c-greeting__subtitle">頑張って！ (¡Haz tu mejor esfuerzo!)</p>
     </div>
-    <div class="notification-pill" *ngIf="showNotifications && notificationCount > 0">
+    <div class="c-notification-pill" *ngIf="showNotifications && notificationCount > 0">
         <i class="pi pi-bell"></i>
         <span>Tienes {{ notificationCount }} {{ notificationCount === 1 ? 'notificación nueva' : 'notificaciones nuevas'
             }}</span>
@@ -12,112 +12,112 @@
 </header>
 
 <!-- Fila de Estadísticas (Stats Cards) -->
-<section class="stats-row">
+<section class="l-stats-row">
     <!-- Card 1: Racha -->
-    <div class="stat-card">
-        <div class="stat-header">
-            <div class="stat-icon fire">
+    <div class="c-stat-card">
+        <div class="c-stat-card__header">
+            <div class="c-stat-card__icon c-stat-card__icon--fire">
                 <i class="pi pi-bolt"></i>
             </div>
-            <span class="stat-label">Racha</span>
+            <span class="c-stat-card__label">Racha</span>
         </div>
-        <p class="stat-value">{{ userStreak }} Días</p>
-        <p class="stat-caption">¡Sigue así! 🔥</p>
+        <p class="c-stat-card__value">{{ userStreak }} Días</p>
+        <p class="c-stat-card__caption">¡Sigue así! 🔥</p>
     </div>
 
     <!-- Card 2: Experiencia -->
-    <div class="stat-card">
-        <div class="stat-header">
-            <div class="stat-icon star">
+    <div class="c-stat-card">
+        <div class="c-stat-card__header">
+            <div class="c-stat-card__icon c-stat-card__icon--star">
                 <i class="pi pi-star"></i>
             </div>
-            <span class="stat-label">Experiencia (Nvl {{ userLevel }})</span>
+            <span class="c-stat-card__label">Experiencia (Nvl {{ userLevel }})</span>
         </div>
-        <p class="stat-value">{{ userXp }} / {{ nextLevelXp }} XP</p>
-        <div class="progress-bar">
+        <p class="c-stat-card__value">{{ userXp }} / {{ nextLevelXp }} XP</p>
+        <div class="c-progress-bar">
             <!-- Barra dinámica: Cálculo porcentual relativo -->
-            <div class="progress-fill" [style.width.%]="(userXp / nextLevelXp) * 100"></div>
+            <div class="c-progress-bar__fill" [style.width.%]="(userXp / nextLevelXp) * 100"></div>
         </div>
-        <p class="stat-caption">{{ nextLevelXp - userXp }} XP para subir de nivel</p>
+        <p class="c-stat-card__caption">{{ nextLevelXp - userXp }} XP para subir de nivel</p>
     </div>
 
     <!-- Card 3: Enfoque -->
-    <div class="stat-card">
-        <div class="stat-header">
-            <div class="stat-icon clock">
+    <div class="c-stat-card">
+        <div class="c-stat-card__header">
+            <div class="c-stat-card__icon c-stat-card__icon--clock">
                 <i class="pi pi-clock"></i>
             </div>
-            <span class="stat-label">Enfoque</span>
+            <span class="c-stat-card__label">Enfoque</span>
         </div>
-        <p class="stat-value">{{ focusTimeFormatted }}</p>
-        <p class="stat-caption">Tiempo total</p>
+        <p class="c-stat-card__value">{{ focusTimeFormatted }}</p>
+        <p class="c-stat-card__caption">Tiempo total</p>
     </div>
 
     <!-- Card 4: Modo Zen (Rosa) -->
-    <div class="zen-card">
-        <div class="zen-content">
-            <h3 class="zen-title">Modo Zen</h3>
-            <p class="zen-subtitle">Activa tu mejor enfoque</p>
-            <button class="zen-play-btn" routerLink="../pomodoro">
+    <div class="c-zen-card">
+        <div class="c-zen-card__content">
+            <h3 class="c-zen-card__title">Modo Zen</h3>
+            <p class="c-zen-card__subtitle">Activa tu mejor enfoque</p>
+            <button class="c-zen-card__play-btn" routerLink="/dashboard/pomodoro">
                 <i class="pi pi-play"></i>
                 <span>Iniciar</span>
             </button>
         </div>
-        <div class="zen-decoration">
+        <div class="c-zen-card__decoration">
             <i class="pi pi-sparkles"></i>
         </div>
     </div>
 </section>
 
 <!-- Grid Inferior: Misiones + Próximo Evento -->
-<section class="bottom-grid">
+<section class="l-bottom-grid">
     <!-- Panel Izquierda: Misiones -->
-    <div class="missions-panel card-white">
-        <div class="panel-header">
-            <h3 class="panel-title">
+    <div class="c-missions-panel c-panel-base">
+        <div class="c-panel-base__header">
+            <h3 class="c-panel-base__title">
                 <i class="pi pi-flag"></i>
                 Misiones
             </h3>
-            <span class="task-count">
+            <span class="c-panel-base__count">
                 {{ missionsCompleted }} / {{ stats?.totalQuests || 0 }}
             </span>
         </div>
 
-        <div class="missions-list">
+        <div class="c-missions-panel__list">
             <!-- Misiones activas desde BD -->
-            <div class="mission-item" *ngFor="let quest of activeQuests">
-                <div class="mission-info">
-                    <div class="mission-icon" [ngClass]="{
-                        'math': quest.rank === 'S',
-                        'history': quest.rank === 'A',
-                        'science': quest.rank === 'B'
+            <div class="c-mission-item" *ngFor="let quest of activeQuests">
+                <div class="c-mission-item__info">
+                    <div class="c-mission-item__icon" [ngClass]="{
+                        'c-mission-item__icon--s': quest.rank === 'S',
+                        'c-mission-item__icon--a': quest.rank === 'A',
+                        'c-mission-item__icon--b': quest.rank === 'B'
                     }">
                         <i class="pi pi-flag"></i>
                     </div>
-                    <div class="mission-details">
-                        <h4 class="mission-name">{{ quest.title }}</h4>
-                        <p class="mission-desc">{{ quest.description }}</p>
+                    <div class="c-mission-item__details">
+                        <h4 class="c-mission-item__name">{{ quest.title }}</h4>
+                        <p class="c-mission-item__desc">{{ quest.description }}</p>
                     </div>
                 </div>
-                <div class="mission-progress">
-                    <span class="xp-badge">{{ quest.xp }} XP</span>
+                <div class="c-mission-item__progress">
+                    <span class="c-badge">{{ quest.xp }} XP</span>
                 </div>
             </div>
 
             <!-- Mensaje si no hay misiones activas -->
-            <p class="no-missions" *ngIf="activeQuests.length === 0">
+            <p class="c-missions-panel__empty" *ngIf="activeQuests.length === 0">
                 <i class="pi pi-check-circle"></i>
                 ¡Todo completado! Añade nuevas misiones.
             </p>
         </div>
 
-        <button class="view-all-btn" routerLink="../missions">Ver todas las misiones →</button>
+        <button class="c-btn-secondary" routerLink="/dashboard/missions">Ver todas las misiones →</button>
     </div>
 
     <!-- Panel Derecha: Próximo Evento -->
-    <div class="event-panel card-white">
-        <div class="panel-header">
-            <h3 class="panel-title">
+    <div class="c-event-panel c-panel-base">
+        <div class="c-panel-base__header">
+            <h3 class="c-panel-base__title">
                 <i class="pi pi-calendar"></i>
                 Próximo Evento
             </h3>
@@ -125,35 +125,35 @@
 
         <!-- Mostrar evento si existe -->
         <div *ngIf="nextEvent">
-            <div class="event-card">
-                <div class="event-date">
-                    <span class="date-day">{{ nextEvent.start | date:'dd' }}</span>
-                    <span class="date-month">{{ nextEvent.start | date:'MMM' | uppercase }}</span>
+            <div class="c-event-card">
+                <div class="c-event-card__date">
+                    <span class="c-event-card__day">{{ nextEvent.start | date:'dd' }}</span>
+                    <span class="c-event-card__month">{{ nextEvent.start | date:'MMM' | uppercase }}</span>
                 </div>
-                <div class="event-info">
-                    <h4 class="event-title">{{ nextEvent.title }}</h4>
-                    <p class="event-time">
+                <div class="c-event-card__info">
+                    <h4 class="c-event-card__title">{{ nextEvent.title }}</h4>
+                    <p class="c-event-card__time">
                         <i class="pi pi-clock"></i>
                         {{ nextEvent.type }}
                     </p>
-                    <div class="event-tags">
-                        <span class="event-tag" [ngClass]="{
-                            'tag-exam': nextEvent.type === 'exam',
-                            'tag-delivery': nextEvent.type === 'delivery',
-                            'tag-class': nextEvent.type === 'class'
+                    <div class="c-event-card__tags">
+                        <span class="c-event-card__tag" [ngClass]="{
+                            'c-event-card__tag--exam': nextEvent.type === 'exam',
+                            'c-event-card__tag--delivery': nextEvent.type === 'delivery',
+                            'c-event-card__tag--class': nextEvent.type === 'class'
                         }">{{ nextEvent.type }}</span>
                     </div>
                 </div>
             </div>
 
-            <div class="countdown">
+            <div class="c-countdown">
                 <i class="pi pi-hourglass"></i>
                 <span>Faltan {{ daysToEvent }} días</span>
             </div>
         </div>
 
         <!-- Mensaje si no hay eventos -->
-        <p class="no-events" *ngIf="!nextEvent">
+        <p class="c-event-panel__empty" *ngIf="!nextEvent">
             <i class="pi pi-calendar-plus"></i>
             No hay eventos próximos.
         </p>

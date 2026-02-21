@@ -52,7 +52,7 @@ export class Profile implements OnInit {
     achievements: []
   };
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     // 1. Carga inmediata desde caché local (sin esperar al servidor)
@@ -74,26 +74,27 @@ export class Profile implements OnInit {
 
   private mapUserData(userData: any): void {
     // Datos básicos
-    this.user.name   = userData.name  || 'Estudiante';
-    this.user.level  = userData.level || 1;
+    this.user.name = userData.name || 'Estudiante';
+    this.user.level = userData.level || 1;
     this.user.avatar = userData.avatar || 'assets/images/avatar.png';
-    this.user.title  = `Estudiante Nivel ${this.user.level}`;
+    this.user.title = `Estudiante Nivel ${this.user.level}`;
 
     // XP
     this.user.xp.current = userData.xp || 0;
-    this.user.xp.next    = (this.user.level * 100) + 100;
+    this.user.xp.next = (this.user.level * 100) + 100;
 
     // Stats
-    this.user.stats.tasks  = userData.stats?.tasksCompleted || 0;
-    this.user.stats.streak = userData.stats?.streak         || 0;
-    this.user.stats.hours  = Math.floor((userData.focusTime || 0) / 60);
+    this.user.stats.tasks = userData.stats?.tasksCompleted || 0;
+    this.user.stats.streak = userData.stats?.streak || 0;
+    this.user.stats.hours = Math.floor((userData.focusTime || 0) / 60);
 
     // Atributos RPG
     this.user.attributes.intelligence = userData.attributes?.intelligence || 10;
-    this.user.attributes.discipline   = userData.attributes?.discipline   || 10;
-    this.user.attributes.creativity   = userData.attributes?.creativity   || 10;
+    this.user.attributes.discipline = userData.attributes?.discipline || 10;
+    this.user.attributes.creativity = userData.attributes?.creativity || 10;
 
     // Logros
+    console.log('Logros del usuario:', userData.achievements);
     this.user.achievements = userData.achievements || [];
   }
 

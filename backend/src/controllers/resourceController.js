@@ -18,7 +18,8 @@ const getResources = async (req, res) => {
     const resources = await Resource.find({ user: req.user.id }).sort({ createdAt: -1 });
     res.status(200).json(resources);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
@@ -52,7 +53,8 @@ const createResource = async (req, res) => {
 
     res.status(201).json(resource);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
@@ -76,7 +78,8 @@ const deleteResource = async (req, res) => {
 
     res.status(200).json({ id: req.params.id });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 

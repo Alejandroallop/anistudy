@@ -137,11 +137,10 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
   /**
    * Abre el modal para crear un nuevo evento
    */
-  openModal() {
+  openModal(dateStr?: string) {
     this.isModalOpen = true;
-    // Establecer fecha de hoy como default
-    const today = new Date().toISOString().split('T')[0];
-    this.newDate = today;
+    // Si se recibe una fecha, usarla; si no, usar la fecha de hoy
+    this.newDate = dateStr ?? new Date().toISOString().split('T')[0];
 
     // Forzar la actualización de la vista (FullCalendar ejecuta callbacks fuera de NgZone)
     this.cd.detectChanges();
@@ -191,8 +190,7 @@ export class Calendar implements OnInit, AfterViewInit, OnDestroy {
    * Abre el modal con la fecha clickeada preseleccionada
    */
   handleDateClick(arg: DateClickArg) {
-    this.newDate = arg.dateStr;
-    this.openModal();
+    this.openModal(arg.dateStr);
   }
 
   /**

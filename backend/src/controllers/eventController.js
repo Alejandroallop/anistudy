@@ -8,7 +8,8 @@ const getEvents = async (req, res) => {
     const events = await Event.find({ user: req.user.id }).sort({ date: 1 });
     res.status(200).json(events);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
@@ -41,7 +42,8 @@ const createEvent = async (req, res) => {
 
     res.status(201).json(event);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
@@ -65,7 +67,8 @@ const deleteEvent = async (req, res) => {
 
     res.status(200).json({ id: req.params.id });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 

@@ -1,6 +1,6 @@
 <section class="c-missions glass-panel">
   <header class="c-missions__header">
-    <h2>📋 Tablón de Misiones</h2>
+    <h2 class="c-missions__title">📋 Tablón de Misiones</h2>
     <button class="c-btn c-btn--primary" (click)="openModal()">
       <i class="pi pi-plus"></i> Nueva Misión
     </button>
@@ -73,7 +73,6 @@
               <span class="c-card__xp">+{{ quest.xp }} XP</span>
               <button class="c-btn-icon" (click)="deleteQuest(quest._id!, $event)" title="Borrar">
                 <i class="pi pi-trash"></i>
-                <!-- <span *ngIf="false">🗑️</span> -->
               </button>
             </div>
           </div>
@@ -99,7 +98,6 @@
               <span class="c-card__xp c-card__xp--active">+{{ quest.xp }} XP</span>
               <button class="c-btn-icon" (click)="deleteQuest(quest._id!, $event)" title="Borrar">
                 <i class="pi pi-trash"></i>
-                <!-- <span *ngIf="false">🗑️</span> -->
               </button>
             </div>
           </div>
@@ -125,7 +123,6 @@
               <span class="c-card__xp c-card__xp--done">+{{ quest.xp }} XP</span>
               <button class="c-btn-icon" (click)="deleteQuest(quest._id!, $event)" title="Borrar">
                 <i class="pi pi-trash"></i>
-                <!-- <span *ngIf="false">🗑️</span> -->
               </button>
             </div>
           </div>

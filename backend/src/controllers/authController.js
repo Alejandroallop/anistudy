@@ -44,7 +44,8 @@ const register = async (req, res) => {
       res.status(400).json({ message: 'Datos de usuario inválidos' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
@@ -62,7 +63,8 @@ const login = async (req, res) => {
       res.status(401).json({ message: 'Email o contraseña inválidos' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
@@ -77,7 +79,8 @@ const getProfile = async (req, res) => {
     }
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in controller:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 };
 
